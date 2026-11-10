@@ -35,7 +35,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
       '',
       formData.message,
     ].join('\n');
-    window.location.href = `mailto:info@hlcgrupo.co.uk?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:info@hlcgrupo.co.uk,hlcimperativegrupo@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(body)}`;
     setFormSubmitted(true);
   };
 
@@ -76,8 +76,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
               </p>
               <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-400">
                 <a href="mailto:info@hlcgrupo.co.uk" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
+                  <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>info@hlcgrupo.co.uk</span>
+                </a>
+                <a href="mailto:hlcimperativegrupo@gmail.com" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
+                  <span>hlcimperativegrupo@gmail.com</span>
                 </a>
                 <a href="https://wa.me/447900904646" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5" target="_blank" rel="noreferrer">
                   <Phone className="w-3.5 h-3.5 text-slate-500" />
@@ -180,7 +184,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                   Your email app should open with your enquiry
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
-                  Review and send the message in your email app. If it did not open, email us at info@hlcgrupo.co.uk or WhatsApp +44 7900 904646.
+                  Review and send the message in your email app. If it did not open, email us at info@hlcgrupo.co.uk or hlcimperativegrupo@gmail.com, or WhatsApp +44 7900 904646.
                 </p>
                 <button
                   onClick={() => setFormSubmitted(false)}
@@ -196,7 +200,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                     {t.sendEnquiry}
                   </h3>
                   <p className="text-xs text-slate-400 mb-4">
-                    Email <a href="mailto:info@hlcgrupo.co.uk" className="text-[#D4AF37] hover:text-white">info@hlcgrupo.co.uk</a> · UK WhatsApp <a href="https://wa.me/447900904646" target="_blank" rel="noreferrer" className="text-[#D4AF37] hover:text-white">+44 7900 904646</a>
+                    Email <a href="mailto:info@hlcgrupo.co.uk" className="text-[#D4AF37] hover:text-white">info@hlcgrupo.co.uk</a> / <a href="mailto:hlcimperativegrupo@gmail.com" className="text-[#D4AF37] hover:text-white">hlcimperativegrupo@gmail.com</a> · UK WhatsApp <a href="https://wa.me/447900904646" target="_blank" rel="noreferrer" className="text-[#D4AF37] hover:text-white">+44 7900 904646</a>
                   </p>
                 </div>
 
