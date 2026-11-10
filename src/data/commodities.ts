@@ -2,6 +2,37 @@ import { Commodity } from '../types';
 
 export const COMMODITIES: Commodity[] = [
   {
+    id: 'lithium-ore',
+    name: 'Lithium-Bearing Ore',
+    frenchName: 'Minerai contenant du lithium',
+    chineseName: '含锂矿石',
+    arabicName: 'خام الليثيوم',
+    category: 'solid_minerals',
+    categoryLabel: 'Solid Minerals',
+    tagline: 'Lithium-bearing mineral material for evaluation by battery-material processors and mineral buyers.',
+    description: 'Lithium-bearing ore is offered for sourcing enquiries, subject to confirmation of mineralogy, representative sampling, independent assay and verified availability. Commercial terms depend on the material, buyer requirements and confirmed supply source.',
+    typicalSpecs: [
+      { parameter: 'Lithium content (Li₂O)', typicalValue: 'To be confirmed by representative assay', testStandard: 'Independent laboratory, method agreed by buyer and seller' },
+      { parameter: 'Mineralogy and impurities', typicalValue: 'To be confirmed for each lot', testStandard: 'Laboratory analysis' },
+      { parameter: 'Moisture, sizing and packaging', typicalValue: 'To be agreed against buyer requirements', testStandard: 'Sampling and inspection by agreement' },
+    ],
+    applications: [
+      'Feedstock evaluation for lithium mineral processors',
+      'Potential conversion into lithium chemicals for battery supply chains, subject to grade and processing suitability',
+      'Metallurgical and mineralogical testing',
+    ],
+    origin: 'Origin and supply source to be verified for each enquiry',
+    exportCapability: {
+      monthlyCapacity: 'Availability and volume confirmed case by case',
+      loadingPorts: ['To be agreed after source and logistics review'],
+      packaging: ['To be agreed with the buyer and confirmed supplier'],
+      minimumOrderQuantity: 'To be agreed for each enquiry',
+      incoterms: ['FOB', 'CIF', 'CFR'],
+    },
+    inspectionStandard: 'Independent sampling, assay and weight inspection can be agreed for each transaction.',
+    heroImage: '/assets/images/mining_solid_minerals_quarry_1794006537900.jpg',
+  },
+  {
     id: 'coal',
     name: 'Thermal & Metallurgical Coal',
     frenchName: 'Charbon Thermique et Métallurgique',

@@ -40,7 +40,7 @@ export const CommodityDetailModal: React.FC<CommodityDetailModalProps> = ({
             </span>
             <span className="text-slate-600">·</span>
             <span className="text-xs text-slate-400 font-mono">
-              ASTM / ISO COMPLIANT
+              SPECIFICATIONS SUBJECT TO CONFIRMATION
             </span>
           </div>
 
@@ -70,7 +70,7 @@ export const CommodityDetailModal: React.FC<CommodityDetailModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-mono">
-                Laboratory Assays & Technical Specifications
+                Typical Specifications & Buyer Requirements
               </h3>
               <span className="text-xs text-slate-400">Standardized Testing</span>
             </div>
@@ -150,12 +150,12 @@ export const CommodityDetailModal: React.FC<CommodityDetailModalProps> = ({
 
           </div>
 
-          {/* Third-Party Inspection Quality Guarantee */}
+            {/* Inspection approach */}
           <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
             <div className="text-xs text-slate-300">
-              <strong className="text-white block mb-0.5">Mandatory Pre-Shipment Assay & Weight Survey:</strong>
-              {commodity.inspectionStandard}. Full Certificate of Analysis (COA) issued directly by accredited international surveyors prior to vessel bill of lading issuance.
+              <strong className="text-white block mb-0.5">Inspection by agreement:</strong>
+              {commodity.inspectionStandard} Product specifications, availability, origin and export arrangements must be confirmed for each enquiry.
             </div>
           </div>
 
