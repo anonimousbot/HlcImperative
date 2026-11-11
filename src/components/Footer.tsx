@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, ArrowUp } from 'lucide-react';
+import { ShieldCheck, ArrowUp, Key } from 'lucide-react';
 import { Language } from '../types';
 import { COMMODITIES } from '../data/commodities';
 import { TRANSLATIONS } from '../data/translations';
@@ -8,12 +8,14 @@ interface FooterProps {
   currentLang: Language;
   onOpenCompanyProfile: () => void;
   onSelectCommodity: (commodityId: string) => void;
+  onOpenEmailSetup?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   currentLang,
   onOpenCompanyProfile,
   onSelectCommodity,
+  onOpenEmailSetup,
 }) => {
   const t = TRANSLATIONS[currentLang].footer;
 
@@ -53,14 +55,24 @@ export const Footer: React.FC<FooterProps> = ({
               {t.tagline}
             </p>
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap gap-2.5">
               <button
                 onClick={onOpenCompanyProfile}
                 className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-200 hover:text-white bg-slate-900 border border-slate-700/80 hover:border-[#D4AF37]/60 rounded-lg transition-colors cursor-pointer"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>Download Institutional Profile (PDF)</span>
+                <span>Institutional Profile (PDF)</span>
               </button>
+
+              {onOpenEmailSetup && (
+                <button
+                  onClick={onOpenEmailSetup}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-[#D4AF37] hover:text-white bg-slate-900 border border-[#D4AF37]/40 hover:border-[#D4AF37] rounded-lg transition-colors cursor-pointer"
+                >
+                  <Key className="w-3.5 h-3.5" />
+                  <span>Connect Web3Forms</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -112,10 +124,10 @@ export const Footer: React.FC<FooterProps> = ({
             <p className="text-slate-400 leading-relaxed font-sans">
               {t.corporateNotice}
             </p>
-            <div className="space-y-1 text-slate-500 pt-1">
-              <div>RC: 1894204 (Nigeria)</div>
-              <div>NEPC: DA/EX/10892/VOL.1</div>
+            <div className="space-y-1 text-slate-400 pt-1">
+              <div>RC: 1894204 (Nigeria) · NEPC Licensed</div>
               <div>UK Trading Desk: London Mayfair</div>
+              <div>Direct Inbox: <a href="mailto:hlcimperativegrupo@gmail.com" className="text-[#D4AF37] hover:underline font-bold">hlcimperativegrupo@gmail.com</a></div>
             </div>
           </div>
 

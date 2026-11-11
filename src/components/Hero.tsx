@@ -52,10 +52,10 @@ export const Hero: React.FC<HeroProps> = ({
             </p>
 
             {/* Action Buttons Group */}
-            <div className="flex flex-wrap items-center gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-8">
               <button
                 onClick={onRequestQuote}
-                className="px-6 py-3.5 text-sm font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-lg shadow-lg hover:shadow-[#D4AF37]/20 transition-all flex items-center gap-2 group whitespace-nowrap cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3.5 min-h-[48px] text-sm font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-xl shadow-lg hover:shadow-[#D4AF37]/20 transition-all flex items-center justify-center gap-2 group whitespace-nowrap cursor-pointer active:scale-[0.99]"
               >
                 <span>{t.requestQuoteBtn}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -63,7 +63,7 @@ export const Hero: React.FC<HeroProps> = ({
 
               <button
                 onClick={onOpenSupplierPortal}
-                className="px-6 py-3.5 text-sm font-semibold text-slate-200 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-[#D4AF37]/60 rounded-lg transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer"
+                className="w-full sm:w-auto px-5 py-3.5 min-h-[48px] text-sm font-semibold text-slate-200 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-[#D4AF37]/60 rounded-xl transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
                 <span>{t.becomeSupplierBtn}</span>
@@ -71,7 +71,7 @@ export const Hero: React.FC<HeroProps> = ({
 
               <button
                 onClick={onExploreCatalog}
-                className="px-4 py-3.5 text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                className="w-full sm:w-auto px-4 py-3 min-h-[44px] text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <span>{t.exploreCatalogBtn}</span>
                 <ChevronRight className="w-4 h-4" />
@@ -79,14 +79,14 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             {/* Fast Compliance Notice */}
-            <div className="flex items-center gap-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
               <span className="flex items-center gap-1.5 text-slate-300 font-medium">
-                <Ship className="w-4 h-4 text-[#D4AF37]" />
-                FOB Lagos / Onne Deepwater & CIF Global Ports
+                <Ship className="w-3.5 h-3.5 text-[#D4AF37]" />
+                FOB Lagos / Onne & CIF Global Ports
               </span>
-              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span aria-hidden="true" className="text-slate-600 hidden sm:inline">·</span>
               <span>Incoterms® 2020 Governed</span>
-              <span aria-hidden="true" className="text-slate-600">·</span>
+              <span aria-hidden="true" className="text-slate-600 hidden sm:inline">·</span>
               <span>Full SGS Assay Verification</span>
             </div>
 

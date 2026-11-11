@@ -48,7 +48,7 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
         </div>
 
         {/* Dossier Printable Content Area */}
-        <div className="p-8 sm:p-10 space-y-8 max-h-[85vh] overflow-y-auto print:max-h-none print:p-0 print:overflow-visible text-slate-100 print:text-slate-900">
+        <div className="p-5 sm:p-10 space-y-6 sm:space-y-8 max-h-[85vh] overflow-y-auto print:max-h-none print:p-0 print:overflow-visible text-slate-100 print:text-slate-900">
           
           {/* Header Banner with Brand Mark */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-slate-700 print:border-slate-300">
@@ -62,7 +62,7 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
                 />
               </div>
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-white print:text-slate-950">
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white print:text-slate-950">
                   HLC IMPERATIVE GRUPO LIMITED
                 </h2>
                 <div className="text-xs text-[#D4AF37] font-mono tracking-wider print:text-amber-800">
@@ -122,7 +122,7 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
               2. Core Export Commodities & Typical Specifications
             </h3>
             <div className="overflow-x-auto rounded-xl border border-slate-800 print:border-slate-300">
-              <table className="w-full text-left text-xs font-mono">
+              <table className="w-full min-w-[550px] text-left text-xs font-mono">
                 <thead>
                   <tr className="bg-slate-900 text-slate-400 print:bg-slate-100 print:text-black border-b border-slate-800 print:border-slate-300">
                     <th className="py-2.5 px-3">Commodity</th>
@@ -178,7 +178,7 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
           <div className="pt-4 border-t border-slate-700 print:border-slate-300 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs font-mono text-slate-400 print:text-slate-600">
             <div>
               <span>Official Trade Inquiries: </span>
-              <strong className="text-white print:text-black">sales@hlcgrupo.co.uk</strong> · <span>info@hlcgrupo.co.uk</span>
+              <a href="mailto:hlcimperativegrupo@gmail.com" className="text-[#D4AF37] hover:underline font-bold">hlcimperativegrupo@gmail.com</a> · <strong className="text-white print:text-black">sales@hlcgrupo.co.uk</strong> · <span>info@hlcgrupo.co.uk</span>
             </div>
 
             <div className="flex items-center gap-2">

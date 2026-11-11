@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Ship, Clock, CheckSquare, Printer, CheckCircle, Calculator, Info } from 'lucide-react';
+import { Ship, Clock, CheckSquare, Printer, CheckCircle, Calculator, Info, Mail, ExternalLink } from 'lucide-react';
 import { Commodity, Language, RfqFormData, RfqQuoteRecord } from '../types';
 import { COMMODITIES } from '../data/commodities';
 import { TRANSLATIONS } from '../data/translations';
@@ -62,18 +62,21 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleGenerateQuote = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mailLinks, setMailLinks] = useState<{ mailto: string; gmail: string } | null>(null);
+
+  const handleGenerateQuote = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.buyerName || !formData.buyerEmail || !formData.buyerCompany) {
-      alert('Please provide your name, company, and corporate email to generate the formal quotation manifest.');
       return;
     }
 
+    setIsSubmitting(true);
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const quoteCode = `HLC-RFQ-${new Date().getFullYear()}-${randomSuffix}`;
-
     const loadingPort = currentCommodity.exportCapability.loadingPorts[0];
+
     const docs = [
       'Original Clean On-Board Ocean Bills of Lading (3/3)',
       'Certificate of Quality, Weight & Assay issued by SGS / Bureau Veritas',
@@ -92,8 +95,41 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
       complianceChecklist: docs,
     };
 
-    setGeneratedQuote(quoteRecord);
-    setSubmittedMessage(true);
+    const emailSubject = `[HLC RFQ] ${formData.volumeMt} MT ${currentCommodity.name} (${quoteRecord.incoterm} ${formData.destinationPort}) - ${formData.buyerCompany}`;
+    const emailBody = `OFFICIAL COMMERCIAL RFQ MANIFEST\nReference ID: ${quoteCode}\nTimestamp: ${quoteRecord.timestamp}\n\nBUYER DETAILS:\n- Procurement Officer: ${formData.buyerName}\n- Corporate Entity: ${formData.buyerCompany}\n- Email: ${formData.buyerEmail}\n- Phone / WhatsApp: ${formData.buyerPhone}\n- Destination Country: ${formData.buyerCountry}\n\nCOMMODITY & LOGISTICS:\n- Commodity: ${currentCommodity.name}\n- Contracted Volume: ${formData.volumeMt} MT\n- Incoterms 2020: ${formData.incoterm}\n- Loading Port: ${loadingPort}\n- Destination Discharge Port: ${formData.destinationPort}\n- Packaging: ${formData.packagingPreference}\n- Assay Requirements & Notes: ${formData.notes || 'Standard ASTM/ISO assay specifications'}\n\nTarget Email: hlcimperativegrupo@gmail.com`;
+
+    const mailto = `mailto:hlcimperativegrupo@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=hlcimperativegrupo@gmail.com&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+    setMailLinks({ mailto, gmail });
+
+    try {
+      await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'rfq',
+          name: formData.buyerName,
+          company: formData.buyerCompany,
+          email: formData.buyerEmail,
+          phone: formData.buyerPhone,
+          country: formData.buyerCountry,
+          commodity: currentCommodity.name,
+          volumeMt: formData.volumeMt,
+          incoterm: formData.incoterm,
+          destinationPort: formData.destinationPort,
+          packaging: formData.packagingPreference,
+          notes: formData.notes,
+          referenceId: quoteCode,
+        }),
+      });
+    } catch (err) {
+      console.warn('Backend fetch failed, client mail links ready:', err);
+    } finally {
+      setIsSubmitting(false);
+      setGeneratedQuote(quoteRecord);
+      setSubmittedMessage(true);
+    }
   };
 
   return (
@@ -164,13 +200,13 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                     className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#D4AF37]"
                   />
                   {/* Preset Buttons */}
-                  <div className="flex gap-1.5 mt-2">
+                  <div className="grid grid-cols-4 gap-1.5 mt-2">
                     {[100, 500, 2500, 10000].map((v) => (
                       <button
                         type="button"
                         key={v}
                         onClick={() => handleInputChange('volumeMt', v)}
-                        className={`text-[10px] px-2 py-1 rounded font-mono transition-colors ${
+                        className={`text-xs py-1.5 rounded-lg font-mono transition-colors text-center cursor-pointer min-h-[36px] flex items-center justify-center ${
                           formData.volumeMt === v
                             ? 'bg-[#D4AF37] text-slate-950 font-bold'
                             : 'bg-slate-800 text-slate-400 hover:text-white'
@@ -192,9 +228,9 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                         type="button"
                         key={incoterm}
                         onClick={() => handleInputChange('incoterm', incoterm)}
-                        className={`py-2.5 text-xs font-bold rounded-lg border transition-all text-center ${
+                        className={`min-h-[44px] py-2.5 text-xs font-bold rounded-lg border transition-all text-center cursor-pointer flex items-center justify-center ${
                           formData.incoterm === incoterm
-                            ? 'bg-[#D4AF37] text-slate-950 border-[#D4AF37] shadow-sm'
+                            ? 'bg-[#D4AF37] text-slate-950 border-[#D4AF37] shadow-sm font-extrabold'
                             : 'bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-600'
                         }`}
                       >
@@ -202,8 +238,8 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                       </button>
                     ))}
                   </div>
-                  <span className="text-[10px] text-slate-400 mt-1 block">
-                    {formData.incoterm === 'FOB' ? 'Free on Board at Port of Lagos / Onne' : 'Cost, Insurance & Freight to Discharge Port'}
+                  <span className="text-[10px] text-slate-400 mt-1.5 block">
+                    {formData.incoterm === 'FOB' ? 'Free on Board at Port of Lagos / Onne' : 'Cost, Insurance & Freight to Destination'}
                   </span>
                 </div>
               </div>
@@ -449,19 +485,41 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-700 flex items-center justify-between text-xs">
-                  <span className="text-slate-400 text-[11px]">
-                    Valid for 7 international banking days
-                  </span>
+                <div className="pt-3 border-t border-slate-700 space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400 text-[11px]">
+                      Target Inbox: <strong className="text-[#D4AF37] font-mono">hlcimperativegrupo@gmail.com</strong>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => window.print()}
+                      className="px-2.5 py-1 text-[11px] text-slate-300 hover:text-white bg-slate-800 rounded font-bold transition-colors flex items-center gap-1"
+                    >
+                      <Printer className="w-3 h-3" />
+                      <span>Print</span>
+                    </button>
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => window.print()}
-                    className="px-3 py-1.5 text-xs text-slate-900 bg-[#D4AF37] hover:bg-[#FFF] rounded font-bold transition-colors flex items-center gap-1.5"
-                  >
-                    <Printer className="w-3.5 h-3.5" />
-                    <span>Print Manifest</span>
-                  </button>
+                  {mailLinks && (
+                    <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                      <a
+                        href={mailLinks.gmail}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 py-2 px-3 text-xs font-bold text-slate-950 bg-[#D4AF37] hover:bg-[#FFF] rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Send via Gmail Web</span>
+                      </a>
+                      <a
+                        href={mailLinks.mailto}
+                        className="flex-1 py-2 px-3 text-xs font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
+                        <span>Send via Mail App</span>
+                      </a>
+                    </div>
+                  )}
                 </div>
 
               </div>

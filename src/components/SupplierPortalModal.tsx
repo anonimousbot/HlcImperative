@@ -35,11 +35,47 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
   });
 
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mailLinks, setMailLinks] = useState<{ mailto: string; gmail: string } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const refCode = `HLC-SUP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    setSubmittedRef(refCode);
+
+    const emailSubject = `[HLC Supplier] New Mine Operator Application - ${formData.companyName} (${refCode})`;
+    const emailBody = `HLC SUPPLIER ONBOARDING DOSSIER\nReference ID: ${refCode}\n\nCOMPANY / CONCESSION:\n- Legal Name: ${formData.companyName}\n- Registration / RC: ${formData.registrationNumber}\n- State / Mining Belt: ${formData.stateOrProvince}\n- Cadastral Lease ID: ${formData.miningLeaseNumber}\n\nPRODUCTION:\n- Commodity: ${formData.mineralOrCommodity}\n- Monthly Capacity: ${formData.monthlySupplyCapacity}\n- Certified Assay Available: ${formData.laboratoryAssayAvailable ? 'Yes' : 'No'}\n\nCONTACT PERSON:\n- Lead Executive: ${formData.contactPerson}\n- Email: ${formData.email}\n- Phone: ${formData.phone}\n- Notes & Haulage: ${formData.notes || 'None'}\n\nDestination: hlcimperativegrupo@gmail.com`;
+
+    const mailto = `mailto:hlcimperativegrupo@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=hlcimperativegrupo@gmail.com&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+    setMailLinks({ mailto, gmail });
+
+    try {
+      await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'supplier',
+          name: formData.contactPerson,
+          company: formData.companyName,
+          email: formData.email,
+          phone: formData.phone,
+          country: formData.country,
+          commodity: formData.mineralOrCommodity,
+          leaseId: formData.miningLeaseNumber,
+          monthlyCapacity: formData.monthlySupplyCapacity,
+          assayAvailable: formData.laboratoryAssayAvailable,
+          notes: formData.notes,
+          referenceId: refCode,
+        }),
+      });
+    } catch (err) {
+      console.warn('Backend fetch failed, client mail links ready:', err);
+    } finally {
+      setIsSubmitting(false);
+      setSubmittedRef(refCode);
+    }
   };
 
   return (
@@ -70,7 +106,7 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
         {/* Modal Content */}
         <div className="p-6 sm:p-8 max-h-[80vh] overflow-y-auto">
           {submittedRef ? (
-            <div className="py-10 text-center space-y-4">
+            <div className="py-8 text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
@@ -80,21 +116,40 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
               </h3>
 
               <p className="text-sm text-slate-300 max-w-md mx-auto">
-                {t.submittedDesc}
+                {t.submittedDesc} Transmitted and logged for review by the Nigerian procurement committee at <strong className="text-[#D4AF37] font-mono">hlcimperativegrupo@gmail.com</strong>.
               </p>
 
-              <div className="inline-block p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs my-4">
+              <div className="inline-block p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs my-2">
                 <span className="text-slate-400 block mb-1">Application Reference Code:</span>
                 <span className="text-lg font-bold text-[#D4AF37]">{submittedRef}</span>
               </div>
 
-              <div>
+              {mailLinks && (
+                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-2">
+                  <a
+                    href={mailLinks.gmail}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2.5 px-3 text-xs font-bold text-slate-950 bg-[#D4AF37] hover:bg-[#FFF] rounded-lg transition-colors text-center"
+                  >
+                    Open Pre-filled in Gmail
+                  </a>
+                  <a
+                    href={mailLinks.mailto}
+                    className="flex-1 py-2.5 px-3 text-xs font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors text-center"
+                  >
+                    Send via Mail App
+                  </a>
+                </div>
+              )}
+
+              <div className="pt-3">
                 <button
                   onClick={() => {
                     setSubmittedRef(null);
                     onClose();
                   }}
-                  className="px-6 py-2.5 text-xs font-bold text-slate-950 bg-[#D4AF37] hover:bg-[#E5C07B] rounded-lg transition-colors"
+                  className="px-6 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
                 >
                   Return to Portal
                 </button>
@@ -283,18 +338,18 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
               </div>
 
               {/* Submit Button */}
-              <div className="pt-4 flex items-center justify-end gap-3">
+              <div className="pt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white"
+                  className="w-full sm:w-auto px-4 py-2.5 min-h-[44px] text-xs font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer text-center"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-lg shadow-md transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-6 py-2.5 min-h-[44px] text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center active:scale-[0.99]"
                 >
                   {t.submitBtn}
                 </button>

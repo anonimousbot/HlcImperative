@@ -1,0 +1,28 @@
+[
+  {
+    "id": "HLC-CONTACT-2026-3407",
+    "timestamp": "2026-11-11T18:38:56.359Z",
+    "type": "contact",
+    "recipientEmail": "hlcimperativegrupo@gmail.com",
+    "payload": {
+      "type": "contact",
+      "name": "Pipeline Test",
+      "company": "HLC Sourcing",
+      "email": "hlcimperativegrupo@gmail.com",
+      "message": "Testing Formspree / Web3Forms / fallback handling."
+    }
+  },
+  {
+    "id": "HLC-CONTACT-2026-6363",
+    "timestamp": "2026-11-11T18:20:31.318Z",
+    "type": "contact",
+    "recipientEmail": "hlcimperativegrupo@gmail.com",
+    "payload": {
+      "type": "contact",
+      "name": "Test Trader",
+      "company": "Global Smelting Corp",
+      "email": "buyer@example.com",
+      "message": "Testing dispatch to hlcimperativegrupo@gmail.com"
+    }
+  }
+]

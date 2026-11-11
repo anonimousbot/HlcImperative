@@ -76,7 +76,7 @@ export const CommodityDetailModal: React.FC<CommodityDetailModalProps> = ({
             </div>
 
             <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60">
-              <table className="w-full text-left text-xs font-mono">
+              <table className="w-full min-w-[500px] text-left text-xs font-mono">
                 <thead>
                   <tr className="border-b border-slate-800 bg-slate-900/90 text-slate-400">
                     <th className="py-3 px-4 font-semibold">Chemical / Physical Parameter</th>
@@ -161,11 +161,11 @@ export const CommodityDetailModal: React.FC<CommodityDetailModalProps> = ({
 
         </div>
 
-        {/* Modal Footer Actions */}
-        <div className="px-6 py-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-4">
+        {/* Modal Footer Actions (Responsive) */}
+        <div className="px-5 sm:px-6 py-4 bg-slate-900 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+            className="w-full sm:w-auto px-4 py-2.5 min-h-[44px] text-xs font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer text-center"
           >
             Close Specifications
           </button>
@@ -175,7 +175,7 @@ export const CommodityDetailModal: React.FC<CommodityDetailModalProps> = ({
               onClose();
               onQuoteThis(commodity);
             }}
-            className="px-6 py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-lg shadow-md transition-all flex items-center gap-2 cursor-pointer"
+            className="w-full sm:w-auto px-5 py-2.5 min-h-[44px] text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
           >
             <span>Configure Instant RFQ for {commodity.name.split(' ')[0]}</span>
             <ArrowRight className="w-4 h-4" />

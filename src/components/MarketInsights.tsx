@@ -495,8 +495,14 @@ export const MarketInsights: React.FC<MarketInsightsProps> = ({
 
         {/* Pricing Dashboard Table */}
         <div className="bg-[#091528] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl mb-12">
+          {/* Mobile Swipe Guidance Bar */}
+          <div className="sm:hidden px-4 py-2 bg-slate-900 border-b border-slate-800 text-[10px] font-mono text-slate-400 flex items-center justify-between">
+            <span>← Scroll horizontally to view full grades & delta →</span>
+            <span className="text-[#D4AF37] font-bold">12 Indices</span>
+          </div>
+
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-mono">
+            <table className="w-full min-w-[700px] text-left text-xs font-mono">
               <thead>
                 <tr className="bg-slate-900/90 text-slate-400 border-b border-slate-800">
                   <th className="py-3.5 px-4 font-semibold">Commodity / Index</th>

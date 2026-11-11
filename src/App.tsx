@@ -20,6 +20,7 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { SupplierPortalModal } from './components/SupplierPortalModal';
 import { CompanyProfileModal } from './components/CompanyProfileModal';
+import { EmailSetupModal } from './components/EmailSetupModal';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Language>('en');
@@ -27,6 +28,7 @@ export default function App() {
   const [rfqTargetCommodity, setRfqTargetCommodity] = useState<Commodity | null>(null);
   const [isSupplierPortalOpen, setIsSupplierPortalOpen] = useState(false);
   const [isCompanyProfileOpen, setIsCompanyProfileOpen] = useState(false);
+  const [isEmailSetupOpen, setIsEmailSetupOpen] = useState(false);
 
   // Sync RTL direction when Arabic is selected
   useEffect(() => {
@@ -116,7 +118,9 @@ export default function App() {
         <AboutSection currentLang={currentLang} />
 
         {/* 8. Global Desks, Map, Statutory Registrations & Inquiries Form */}
-        <ContactSection currentLang={currentLang} />
+        <ContactSection
+          currentLang={currentLang}
+        />
 
       </main>
 
@@ -125,6 +129,7 @@ export default function App() {
         currentLang={currentLang}
         onOpenCompanyProfile={() => setIsCompanyProfileOpen(true)}
         onSelectCommodity={handleSelectCommodityById}
+        onOpenEmailSetup={() => setIsEmailSetupOpen(true)}
       />
 
       {/* Modals & Overlays */}
@@ -144,6 +149,11 @@ export default function App() {
       <CompanyProfileModal
         isOpen={isCompanyProfileOpen}
         onClose={() => setIsCompanyProfileOpen(false)}
+      />
+
+      <EmailSetupModal
+        isOpen={isEmailSetupOpen}
+        onClose={() => setIsEmailSetupOpen(false)}
       />
 
     </div>
