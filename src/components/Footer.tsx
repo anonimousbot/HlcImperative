@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, ArrowUp, Key } from 'lucide-react';
+import { ShieldCheck, ArrowUp } from 'lucide-react';
 import { Language } from '../types';
 import { COMMODITIES } from '../data/commodities';
 import { TRANSLATIONS } from '../data/translations';
@@ -8,14 +8,12 @@ interface FooterProps {
   currentLang: Language;
   onOpenCompanyProfile: () => void;
   onSelectCommodity: (commodityId: string) => void;
-  onOpenEmailSetup?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   currentLang,
   onOpenCompanyProfile,
   onSelectCommodity,
-  onOpenEmailSetup,
 }) => {
   const t = TRANSLATIONS[currentLang].footer;
 
@@ -61,18 +59,9 @@ export const Footer: React.FC<FooterProps> = ({
                 className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-200 hover:text-white bg-slate-900 border border-slate-700/80 hover:border-[#D4AF37]/60 rounded-lg transition-colors cursor-pointer"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>Institutional Profile (PDF)</span>
+                <span>Company Overview (Print / PDF)</span>
               </button>
 
-              {onOpenEmailSetup && (
-                <button
-                  onClick={onOpenEmailSetup}
-                  className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-[#D4AF37] hover:text-white bg-slate-900 border border-[#D4AF37]/40 hover:border-[#D4AF37] rounded-lg transition-colors cursor-pointer"
-                >
-                  <Key className="w-3.5 h-3.5" />
-                  <span>Connect Web3Forms</span>
-                </button>
-              )}
             </div>
           </div>
 
@@ -83,8 +72,7 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
             <ul className="space-y-2">
               <li><a href="#commodities" className="hover:text-[#D4AF37] transition-colors">Commodities Catalog</a></li>
-              <li><a href="#market-insights" className="hover:text-[#D4AF37] transition-colors">Market Insights & Pricing</a></li>
-              <li><a href="#rfq-estimator" className="hover:text-[#D4AF37] transition-colors">Instant RFQ Estimator</a></li>
+              <li><a href="#rfq-estimator" className="hover:text-[#D4AF37] transition-colors">Request a Quote</a></li>
               <li><a href="#services" className="hover:text-[#D4AF37] transition-colors">Sourcing Services</a></li>
               <li><a href="#logistics" className="hover:text-[#D4AF37] transition-colors">Global Trade Routes</a></li>
               <li><a href="#why-us" className="hover:text-[#D4AF37] transition-colors">Why Choose HLC</a></li>
@@ -125,8 +113,8 @@ export const Footer: React.FC<FooterProps> = ({
               {t.corporateNotice}
             </p>
             <div className="space-y-1 text-slate-400 pt-1">
-              <div>RC: 1894204 (Nigeria) · NEPC Licensed</div>
-              <div>UK Trading Desk: London Mayfair</div>
+              <div>Commodity availability and origin are confirmed for each enquiry.</div>
+              <div>Inspection and export documentation are agreed transaction by transaction.</div>
               <div>Direct Inbox: <a href="mailto:hlcimperativegrupo@gmail.com" className="text-[#D4AF37] hover:underline font-bold">hlcimperativegrupo@gmail.com</a></div>
             </div>
           </div>

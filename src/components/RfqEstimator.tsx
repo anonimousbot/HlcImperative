@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Ship, Clock, CheckSquare, Printer, CheckCircle, Calculator, Info } from 'lucide-react';
+import { Ship, Printer, CheckCircle, Calculator, Info } from 'lucide-react';
 import { Commodity, Language, RfqFormData, RfqQuoteRecord } from '../types';
 import { COMMODITIES } from '../data/commodities';
 import { TRANSLATIONS } from '../data/translations';
@@ -13,15 +13,15 @@ interface RfqEstimatorProps {
 }
 
 const DESTINATION_PORTS = [
-  { name: 'Rotterdam, Netherlands', region: 'Europe', transitDays: 18, baseFreightScore: 'Low' },
-  { name: 'Antwerp, Belgium', region: 'Europe', transitDays: 19, baseFreightScore: 'Low' },
-  { name: 'Qingdao, China', region: 'Asia-Pacific', transitDays: 32, baseFreightScore: 'Moderate' },
-  { name: 'Shanghai, China', region: 'Asia-Pacific', transitDays: 31, baseFreightScore: 'Moderate' },
-  { name: 'Dubai (Jebel Ali), UAE', region: 'Middle East', transitDays: 22, baseFreightScore: 'Favorable' },
-  { name: 'Singapore Port, Singapore', region: 'Southeast Asia', transitDays: 26, baseFreightScore: 'Favorable' },
-  { name: 'Houston (Texas), United States', region: 'Americas', transitDays: 24, baseFreightScore: 'Moderate' },
-  { name: 'Mumbai (Nhava Sheva), India', region: 'South Asia', transitDays: 21, baseFreightScore: 'Favorable' },
-  { name: 'Iskenderun / Mersin, Turkey', region: 'Mediterranean', transitDays: 20, baseFreightScore: 'Low' },
+  { name: 'Rotterdam, Netherlands', region: 'Europe' },
+  { name: 'Antwerp, Belgium', region: 'Europe' },
+  { name: 'Qingdao, China', region: 'Asia-Pacific' },
+  { name: 'Shanghai, China', region: 'Asia-Pacific' },
+  { name: 'Dubai (Jebel Ali), UAE', region: 'Middle East' },
+  { name: 'Singapore Port, Singapore', region: 'Southeast Asia' },
+  { name: 'Houston (Texas), United States', region: 'Americas' },
+  { name: 'Mumbai (Nhava Sheva), India', region: 'South Asia' },
+  { name: 'Iskenderun / Mersin, Turkey', region: 'Mediterranean' },
 ];
 
 export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
@@ -32,7 +32,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
 
   const [formData, setFormData] = useState<RfqFormData>({
     commodityId: preselectedCommodity?.id || COMMODITIES[0].id,
-    grade: 'Commercial Standard Export Grade',
+    grade: 'To be agreed with the buyer',
     volumeMt: 500,
     incoterm: 'CIF',
     destinationPort: 'Rotterdam, Netherlands',
@@ -60,8 +60,6 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
   }, [preselectedCommodity]);
 
   const currentCommodity = COMMODITIES.find((c) => c.id === formData.commodityId) || COMMODITIES[0];
-  const selectedPort = DESTINATION_PORTS.find((p) => p.name === formData.destinationPort) || DESTINATION_PORTS[0];
-
   const handleInputChange = (field: keyof RfqFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -76,24 +74,10 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
     setIsSubmitting(true);
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const quoteCode = `HLC-RFQ-${new Date().getFullYear()}-${randomSuffix}`;
-    const loadingPort = currentCommodity.exportCapability.loadingPorts[0];
-
-    const docs = [
-      'Original Clean On-Board Ocean Bills of Lading (3/3)',
-      'Certificate of Quality, Weight & Assay issued by SGS / Bureau Veritas',
-      'Certificate of Origin authenticated by Nigerian Chamber of Commerce',
-      'Signed Commercial Invoice & Detailed Packing List (3 original copies)',
-      'Central Bank of Nigeria Form NXP Clean Export Approval',
-      formData.commodityId === 'charcoal' ? 'Federal Phytosanitary & Non-DG Fumigation Certificate' : 'Pre-Shipment Radiation & Contamination Free Certificate',
-    ];
-
     const quoteRecord: RfqQuoteRecord = {
       ...formData,
       referenceId: quoteCode,
       timestamp: new Date().toISOString(),
-      estimatedTransitDays: selectedPort.transitDays,
-      loadingPort,
-      complianceChecklist: docs,
     };
 
     setIsSubmitting(true);
@@ -136,7 +120,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#D4AF37] font-mono mb-3">
             <Calculator className="w-4 h-4" />
-            <span>REAL-TIME COMMERCIAL MANIFEST ENGINE</span>
+            <span>BUYER ENQUIRY FORM</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight text-balance">
             {t.title}
@@ -367,85 +351,45 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
             </form>
           </div>
 
-          {/* Right Column: Live Manifest Preview & Stamped Document */}
+          {/* Right Column: Request summary and confirmation */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Real-time Logistics Estimate Box */}
+            {/* Planning notes */}
             <div className="bg-[#070F1E] border border-slate-800 rounded-2xl p-6 shadow-xl">
               <div className="flex items-center justify-between pb-4 border-b border-slate-800">
                 <span className="text-xs font-mono uppercase text-[#D4AF37] font-semibold">
                   {t.instantEstimate}
                 </span>
                 <span className="text-[11px] font-mono text-slate-400">
-                  MARITIME DISPATCH
+                  SUBJECT TO CONFIRMATION
                 </span>
               </div>
 
               <div className="py-4 space-y-3.5 text-xs font-mono">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">{t.estimatedTransit}:</span>
-                  <span className="text-white font-bold text-sm tabular-nums flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    ~{selectedPort.transitDays} Days Sailing
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">{t.loadingPort}:</span>
-                  <span className="text-slate-200 font-semibold text-right">
-                    {currentCommodity.exportCapability.loadingPorts[0]}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Discharge Port:</span>
+                  <span className="text-slate-400">Destination:</span>
                   <span className="text-[#D4AF37] font-semibold text-right">
                     {formData.destinationPort}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Rule of Trade:</span>
+                  <span className="text-slate-400">Requested delivery term:</span>
                   <span className="text-white font-bold">
                     Incoterms® 2020 {formData.incoterm}
                   </span>
                 </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Assay Survey:</span>
-                  <span className="text-slate-300">
-                    SGS / Bureau Veritas Certified
-                  </span>
-                </div>
               </div>
 
-              {/* Standard Export Documentation Checklist */}
-              <div className="pt-4 border-t border-slate-800">
+              <div className="pt-4 border-t border-slate-800 text-xs text-slate-400 leading-relaxed">
                 <div className="text-[11px] font-mono text-slate-400 uppercase mb-2">
-                  {t.requiredDocs}:
+                  {t.requiredDocs}
                 </div>
-                <ul className="space-y-1.5 text-[11px] text-slate-300">
-                  <li className="flex items-center gap-2">
-                    <CheckSquare className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>Clean On-Board Ocean Bills of Lading (3/3)</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckSquare className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>Independent Chemical Assay & Weight Certificate</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckSquare className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>Certificate of Origin (Nigerian Chamber of Commerce)</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckSquare className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>CBN Form NXP Statutory Clean Export Permit</span>
-                  </li>
-                </ul>
+                <p>Availability, origin, assay, inspection, transit time, export documents and payment terms are reviewed and confirmed before an offer is made.</p>
               </div>
             </div>
 
-            {/* Stamped Generated Quotation Dossier */}
+            {/* Enquiry acknowledgement */}
             {generatedQuote && (
               <div className="bg-[#0B172B] border-2 border-[#D4AF37]/50 rounded-2xl p-6 shadow-2xl relative animate-in fade-in">
                 
@@ -454,7 +398,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-emerald-400" />
                     <span className="text-xs font-bold text-white font-mono">
-                      OFFICIAL QUOTATION GENERATED
+                      QUOTE REQUEST SENT
                     </span>
                   </div>
                   <span className="text-xs font-mono font-bold text-[#D4AF37]">
@@ -472,12 +416,12 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                     <span className="text-[#D4AF37] font-bold">{currentCommodity.name}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500">Contracted Volume:</span>{' '}
-                    <span className="text-white font-bold">{generatedQuote.volumeMt.toLocaleString()} MT</span> under Incoterms® {generatedQuote.incoterm}
+                    <span className="text-slate-500">Requested volume:</span>{' '}
+                    <span className="text-white font-bold">{generatedQuote.volumeMt.toLocaleString()} MT</span> · Incoterms® {generatedQuote.incoterm}
                   </div>
                   <div>
-                    <span className="text-slate-500">Delivery Route:</span>{' '}
-                    <span>{generatedQuote.loadingPort} ➔ {generatedQuote.destinationPort}</span>
+                    <span className="text-slate-500">Destination:</span>{' '}
+                    <span>{generatedQuote.destinationPort}</span>
                   </div>
                 </div>
 
@@ -502,11 +446,11 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
               </div>
             )}
 
-            {/* Quick Banking Terms Note */}
+            {/* Commercial terms note */}
             <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400 flex items-start gap-2.5">
               <Info className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
               <span>
-                Standard international trade payment instruments supported: Irrevocable Documentary Letter of Credit (DLC / LC at Sight) issued by Top 50 prime international banks, or structured TT milestones against original shipping documentation.
+                Inspection, logistics, payment method and delivery terms are discussed for each enquiry and included in any formal offer or contract.
               </span>
             </div>
 

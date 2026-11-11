@@ -4,6 +4,7 @@ import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import { PhoneInput } from './PhoneInput';
 import { submitToWebForms } from '../lib/webforms';
+import { COUNTRIES } from '../data/callingCodes';
 
 interface ContactSectionProps {
   currentLang: Language;
@@ -20,6 +21,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
     email: '',
     company: '',
     phone: '',
+    destinationCountry: '',
     subject: 'Commodity Supply Inquiry',
     message: '',
   });
@@ -39,6 +41,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
         email: formData.email,
         _replyto: formData.email,
         phone_whatsapp: formData.phone || 'Not provided',
+        destination_country: formData.destinationCountry || 'Not provided',
         subject: formData.subject,
         message: formData.message,
       });
@@ -73,17 +76,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
           {/* Left Column: Dual Offices, Registrations & Map */}
           <div className="lg:col-span-6 space-y-6">
             
-            {/* UK Office Desk Card */}
+            {/* UK contact desk */}
             <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
               <div className="flex items-center gap-2 text-xs font-mono uppercase text-[#D4AF37] mb-2 font-semibold">
                 <Globe2 className="w-4 h-4" />
                 <span>{t.ukOfficeTitle}</span>
               </div>
               <h3 className="text-lg font-bold text-white mb-2">
-                HLC IMPERATIVE GRUPO (UK)
+                United Kingdom contact
               </h3>
               <p className="text-xs text-slate-300 mb-4 leading-relaxed">
-                {t.ukOfficeAddress}
+                Email and WhatsApp contact
               </p>
               <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-400">
                 <a href="mailto:info@hlcgrupo.co.uk" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5">
@@ -111,7 +114,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                 HLC IMPERATIVE GRUPO LIMITED
               </h3>
               <p className="text-xs text-slate-300 mb-4 leading-relaxed">
-                {t.nigeriaOfficeAddress}
+                Nigeria sourcing enquiries
               </p>
               <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-400">
                 <a href="https://wa.me/2348055108156" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5" target="_blank" rel="noreferrer">
@@ -143,9 +146,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                 <div className="flex justify-between items-center text-[11px] font-mono">
                   <div className="flex items-center gap-1.5 text-white">
                     <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
-                    <span>London Commercial Trade Desk (UK)</span>
+                    <span>United Kingdom contact</span>
                   </div>
-                  <span className="text-slate-500">Contracting & Banking</span>
+                  <span className="text-slate-500">Buyer and supplier enquiries</span>
                 </div>
 
                 {/* Connecting Visual SVG Line */}
@@ -165,21 +168,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                 <div className="flex justify-between items-center text-[11px] font-mono">
                   <div className="flex items-center gap-1.5 text-[#D4AF37]">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#D4AF37] animate-pulse" />
-                    <span>Lagos & Onne Export Quayside (Nigeria)</span>
+                    <span>Nigeria sourcing enquiries</span>
                   </div>
-                  <span className="text-slate-500">Mining Belts & Loading</span>
+                  <span className="text-slate-500">Supply and logistics discussions</span>
                 </div>
               </div>
             </div>
 
-            {/* Statutory Corporate Registrations */}
             <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-xs font-mono text-slate-400 space-y-1.5">
               <div className="text-slate-300 font-bold uppercase text-[11px] mb-1">
-                {t.regDetailsTitle}
+                Sourcing and export
               </div>
-              <div>• Nigerian Corporate Affairs Commission: <strong>RC 1894204</strong></div>
-              <div>• Nigerian Export Promotion Council (NEPC): <strong>DA/EX/10892/VOL.1</strong></div>
-              <div>• UK Companies House Corporate Registered Entity</div>
+              <div>Product origin, grade, available volume and export documents are confirmed for each transaction.</div>
+              <div>Independent inspection can be discussed against the buyer’s requirements.</div>
             </div>
 
           </div>
@@ -239,6 +240,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs text-slate-300 mb-1">Destination Country</label>
+                  <select
+                    value={formData.destinationCountry}
+                    onChange={(e) => setFormData({ ...formData, destinationCountry: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
+                  >
+                    <option value="">Select a destination country</option>
+                    {COUNTRIES.map((country) => <option key={country} value={country}>{country}</option>)}
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -50,9 +50,6 @@ export interface RfqFormData {
 export interface RfqQuoteRecord extends RfqFormData {
   referenceId: string;
   timestamp: string;
-  estimatedTransitDays: number;
-  loadingPort: string;
-  complianceChecklist: string[];
 }
 
 export interface SupplierApplicationData {

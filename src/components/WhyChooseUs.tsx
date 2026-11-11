@@ -12,34 +12,34 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ currentLang }) => {
 
   const pillars = [
     {
-      title: 'Nigerian Sourcing Expertise',
+      title: 'Integrity first',
       icon: Compass,
-      description: 'Decades of deep on-the-ground relationships across Nigeria’s prominent mineral provinces: the Benue trough coal deposits, Nasarawa copper-lead veins, Taraba antimony belt, and Niger Delta petrochemical complexes. We know the geology, the local communities, and the transport realities.',
+      description: 'We are building the company around honest communication, realistic offers and dependable follow-through.',
     },
     {
-      title: 'International Business Standards',
+      title: 'Careful sourcing',
       icon: ShieldCheck,
-      description: 'We bridge African resource abundance with Western and Asian corporate governance. Every contract is drafted under standard ICC Incoterms® 2020 rules, with enforceable banking covenants, clear force majeure parameters, and English legal jurisdiction.',
+      description: 'Supplier, source and supporting information are reviewed before a commercial offer is made.',
     },
     {
-      title: 'Vetted & Reliable Supplier Network',
+      title: 'Lot-specific specifications',
       icon: Users,
-      description: 'We eliminate fly-by-night brokers and fraudulent paper allocations. HLC exclusively aggregates from licensed mining leaseholders with confirmed cadastral titles, active extraction pits, and audited stockpile reserves.',
+      description: 'Grade, origin, volume, packaging and availability are confirmed for each lot and buyer requirement.',
     },
     {
-      title: 'Uncompromising Quality Assurance',
+      title: 'Independent checks by agreement',
       icon: CheckCircle,
-      description: 'Every metric ton we ship is subject to strict pre-shipment sampling and testing by globally recognized independent inspection agencies (SGS, Bureau Veritas, Alex Stewart). Discharge happens strictly against authenticated Certificates of Analysis.',
+      description: 'Sampling, assay, weight inspection and other checks can be agreed with the buyer for a transaction.',
     },
     {
-      title: 'Transparent Communication & Real-Time Tracking',
+      title: 'Long-term relationships',
       icon: MessageSquare,
-      description: 'No guessing on loading timelines or customs holds. We provide daily haulage reports, quayside storage manifests, and vessel tracking updates with direct access to our commercial directors in London and Lagos.',
+      description: 'We welcome repeat business built on confirmed supply, clear contracts and consistent communication.',
     },
     {
-      title: 'Built for Long-Term Industrial Partnerships',
+      title: 'Clear communication',
       icon: Handshake,
-      description: 'We are not spot-market opportunists. Our operating model is designed to support multi-year procurement programs for smelters, foundries, cement kilns, and plastics manufacturers requiring predictable raw material deliveries.',
+      description: 'We aim to set expectations clearly and share updates when verified information is available.',
     },
   ];
 

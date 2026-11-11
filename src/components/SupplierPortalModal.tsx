@@ -4,6 +4,8 @@ import { Language, SupplierApplicationData } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import { PhoneInput } from './PhoneInput';
 import { submitToWebForms } from '../lib/webforms';
+import { COMMODITIES } from '../data/commodities';
+import { COUNTRIES } from '../data/callingCodes';
 
 interface SupplierPortalModalProps {
   isOpen: boolean;
@@ -28,10 +30,10 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
     contactPerson: '',
     email: '',
     phone: '',
-    mineralOrCommodity: 'Copper Ore',
+    mineralOrCommodity: '',
     miningLeaseNumber: '',
-    monthlySupplyCapacity: '1,000 MT',
-    laboratoryAssayAvailable: true,
+    monthlySupplyCapacity: '',
+    laboratoryAssayAvailable: false,
     notes: '',
   });
 
@@ -82,7 +84,7 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-5 h-5 text-[#D4AF37]" />
             <span className="text-xs font-mono uppercase tracking-wider text-[#D4AF37] font-semibold">
-              HLC VERIFIED SUPPLIER ONBOARDING
+              SUPPLIER ENQUIRY
             </span>
           </div>
 
@@ -142,7 +144,7 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
               <div className="space-y-4 pt-2">
                 <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-400">
                   <Building className="w-4 h-4 text-[#D4AF37]" />
-                  <span>1. Corporate & Mining Cadastral Information</span>
+                  <span>1. Company and source information</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -159,10 +161,9 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-300 mb-1">{t.regNumber} *</label>
+                    <label className="block text-xs text-slate-300 mb-1">{t.regNumber} (if applicable)</label>
                     <input
                       type="text"
-                      required
                       placeholder="e.g. RC 1482930"
                       value={formData.registrationNumber}
                       onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value })}
@@ -172,6 +173,19 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-slate-300 mb-1">{t.country} *</label>
+                    <select
+                      required
+                      value={formData.country}
+                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
+                    >
+                      <option value="">Select a country</option>
+                      {COUNTRIES.map((country) => <option key={country} value={country}>{country}</option>)}
+                    </select>
+                  </div>
+
                   <div>
                     <label className="block text-xs text-slate-300 mb-1">{t.state} *</label>
                     <input
@@ -185,10 +199,9 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs text-slate-300 mb-1">{t.leaseId} *</label>
+                    <label className="block text-xs text-slate-300 mb-1">{t.leaseId} (if applicable)</label>
                     <input
                       type="text"
-                      required
                       placeholder="e.g. ML 29402 or SSML 1184"
                       value={formData.miningLeaseNumber}
                       onChange={(e) => setFormData({ ...formData, miningLeaseNumber: e.target.value })}
@@ -202,28 +215,21 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
               <div className="space-y-4 pt-4 border-t border-slate-800">
                 <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-400">
                   <Pickaxe className="w-4 h-4 text-[#D4AF37]" />
-                  <span>2. Production Capabilities & Quality Assays</span>
+                  <span>2. Product and availability</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs text-slate-300 mb-1">{t.commodityType} *</label>
                     <select
+                      required
                       value={formData.mineralOrCommodity}
                       onChange={(e) => setFormData({ ...formData, mineralOrCommodity: e.target.value })}
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
                     >
-                      <option value="Copper Ore">Copper Ore (Cu 15-28%+)</option>
-                      <option value="Lead Ore">Lead Ore / Galena (Pb 50-65%+)</option>
-                      <option value="Coal">Thermal & Metallurgical Coal</option>
-                      <option value="Charcoal">Hardwood & Shisha Charcoal</option>
-                      <option value="Antimony Ore">Antimony Ore / Stibnite (Sb 35-55%+)</option>
-                      <option value="Iron Ore">Iron Ore (Hematite / Magnetite)</option>
-                      <option value="Bauxite">Bauxite (Al2O3 48-54%+)</option>
-                      <option value="Limestone">High-Calcium Limestone</option>
-                      <option value="Polypropylene">Polypropylene (PP Resins)</option>
-                      <option value="Polyethylene">Polyethylene (PE Resins)</option>
-                      <option value="Other">Other Industrial Minerals</option>
+                      <option value="">Select a commodity</option>
+                      {COMMODITIES.map((commodity) => <option key={commodity.id} value={commodity.name}>{commodity.name}</option>)}
+                      <option value="Other">Other industrial commodity</option>
                     </select>
                   </div>
 
@@ -232,7 +238,7 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
                     <input
                       type="text"
                       required
-                      placeholder="e.g. 2,000 MT / Month"
+                      placeholder="State the volume you can currently offer"
                       value={formData.monthlySupplyCapacity}
                       onChange={(e) => setFormData({ ...formData, monthlySupplyCapacity: e.target.value })}
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
@@ -257,7 +263,7 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
               {/* Grid 3: Contact Person Details */}
               <div className="space-y-4 pt-4 border-t border-slate-800">
                 <div className="text-xs font-mono uppercase tracking-wider text-slate-400">
-                  3. Key Executive / Concession Manager
+                  3. Contact information
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

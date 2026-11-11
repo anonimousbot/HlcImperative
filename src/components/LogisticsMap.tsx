@@ -9,39 +9,39 @@ interface LogisticsMapProps {
 const SHIPPING_ROUTES = [
   {
     corridor: 'West Africa ➔ Northwest Europe (ARA)',
-    originPort: 'Apapa & Tin Can Island Port, Lagos, Nigeria',
-    dischargeHubs: 'Rotterdam (Netherlands), Antwerp (Belgium), Hamburg (Germany)',
-    typicalSailing: '16 – 19 Days',
-    vesselClass: 'Handymax / Supramax / Post-Panamax Container',
-    primaryCargo: 'Coal, High-Calcium Limestone, Hardwood Charcoal, Polymers',
-    draftCapacity: '13.5m deep-water berth',
+    originPort: 'Loading port agreed after source and cargo review',
+    dischargeHubs: 'Examples: Rotterdam, Antwerp and Hamburg',
+    typicalSailing: 'To be confirmed with the carrier',
+    vesselClass: 'Container or bulk options reviewed per cargo',
+    primaryCargo: 'All listed products, subject to confirmed supply and suitability',
+    draftCapacity: 'Checked for the selected port and vessel',
   },
   {
     corridor: 'West Africa ➔ East Asia / Far East',
-    originPort: 'Onne Deepwater Port & Warri Port, Nigeria',
-    dischargeHubs: 'Qingdao, Shanghai, Tianjin (China), Busan (Korea)',
-    typicalSailing: '30 – 34 Days',
-    vesselClass: 'Handysize Geared Bulk / Heavy-Duty 20ft FCL Liners',
-    primaryCargo: 'Copper Ore (15-28%+), Lead Ore (Galena), Antimony Ore (Stibnite), Iron Ore',
-    draftCapacity: '14.2m multi-purpose deep berth',
+    originPort: 'Loading port agreed after source and cargo review',
+    dischargeHubs: 'Examples: Qingdao, Shanghai, Tianjin and Busan',
+    typicalSailing: 'To be confirmed with the carrier',
+    vesselClass: 'Container or bulk options reviewed per cargo',
+    primaryCargo: 'All listed products, subject to confirmed supply and suitability',
+    draftCapacity: 'Checked for the selected port and vessel',
   },
   {
     corridor: 'West Africa ➔ Middle East & Arabian Gulf',
-    originPort: 'Apapa & Onne Deepwater Terminals, Nigeria',
-    dischargeHubs: 'Jebel Ali (Dubai, UAE), Hamad (Qatar), Dammam (Saudi Arabia)',
-    typicalSailing: '21 – 24 Days',
-    vesselClass: 'Regular Feeder & 40ft HC High-Cube Container Liners',
-    primaryCargo: 'Hardwood Shisha Charcoal, Polypropylene (PP), Polyethylene (PE)',
-    draftCapacity: 'Dedicated container gantry berths',
+    originPort: 'Loading port agreed after source and cargo review',
+    dischargeHubs: 'Examples: Jebel Ali, Hamad and Dammam',
+    typicalSailing: 'To be confirmed with the carrier',
+    vesselClass: 'Container or bulk options reviewed per cargo',
+    primaryCargo: 'All listed products, subject to confirmed supply and suitability',
+    draftCapacity: 'Checked for the selected port and vessel',
   },
   {
     corridor: 'West Africa ➔ North America (Gulf Coast)',
-    originPort: 'Onne Deepwater Port & Apapa Bulk Terminal, Nigeria',
-    dischargeHubs: 'Houston (Texas, USA), New Orleans (Louisiana, USA)',
-    typicalSailing: '23 – 26 Days',
-    vesselClass: 'Direct Transatlantic Dry Bulk Carrier',
-    primaryCargo: 'Bauxite (Refractory grade), Industrial Minerals, Chemical Resins',
-    draftCapacity: 'Heavy lift vessel access',
+    originPort: 'Loading port agreed after source and cargo review',
+    dischargeHubs: 'Examples: Houston and New Orleans',
+    typicalSailing: 'To be confirmed with the carrier',
+    vesselClass: 'Container or bulk options reviewed per cargo',
+    primaryCargo: 'All listed products, subject to confirmed supply and suitability',
+    draftCapacity: 'Checked for the selected port and vessel',
   },
 ];
 
@@ -58,19 +58,19 @@ export const LogisticsMap: React.FC<LogisticsMapProps> = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <div className="text-xs font-semibold uppercase tracking-wider text-[#D4AF37] font-mono mb-2">
-              MARITIME LOGISTICS & TRADE LANES
+              SHIPPING OPTIONS
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-              Global Shipping Corridors & Discharges
+              Possible Destinations
             </h2>
             <p className="mt-3 text-base text-slate-300 max-w-2xl">
-              Connecting primary Nigerian loading terminals in Lagos and Rivers State directly to major deep-water ports across Europe, Asia, the Middle East, and North America.
+              Destination examples are provided for enquiry planning. Loading port, carrier, route, transit time, cargo suitability and costs are confirmed for each transaction.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 shrink-0">
             <Compass className="w-4 h-4 text-[#D4AF37]" />
-            <span>INCOTERMS® 2020 CHARTERING DESK</span>
+            <span>ROUTE REVIEW PER ENQUIRY</span>
           </div>
         </div>
 
@@ -93,7 +93,7 @@ export const LogisticsMap: React.FC<LogisticsMapProps> = () => {
                   <span className={`text-xs font-mono font-bold uppercase tracking-wider ${
                     activeRouteIndex === idx ? 'text-[#D4AF37]' : 'text-slate-400'
                   }`}>
-                    Corridor 0{idx + 1}
+                    Example 0{idx + 1}
                   </span>
                   <span className="text-xs font-mono text-white tabular-nums bg-slate-800/80 px-2 py-0.5 rounded">
                     {route.typicalSailing}
@@ -123,7 +123,7 @@ export const LogisticsMap: React.FC<LogisticsMapProps> = () => {
               {/* Active Corridor Title */}
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#D4AF37] mb-2">
                 <Anchor className="w-4 h-4 text-[#D4AF37]" />
-                <span>ACTIVE OPERATIONAL CORRIDOR</span>
+              <span>ILLUSTRATIVE ROUTE</span>
               </div>
 
               <h3 className="text-2xl font-bold text-white mb-6">
@@ -133,12 +133,12 @@ export const LogisticsMap: React.FC<LogisticsMapProps> = () => {
               {/* Data Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 pb-6 border-y border-slate-800/80 text-xs font-mono">
                 <div>
-                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Nigerian Port of Loading:</span>
+                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Port of loading:</span>
                   <span className="text-white font-semibold text-sm">{activeRoute.originPort}</span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Average Voyage Duration:</span>
+                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Transit time:</span>
                   <span className="text-[#D4AF37] font-bold text-sm">{activeRoute.typicalSailing}</span>
                 </div>
 
@@ -148,17 +148,17 @@ export const LogisticsMap: React.FC<LogisticsMapProps> = () => {
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Vessel & Liner Compatibility:</span>
+                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Vessel options:</span>
                   <span className="text-slate-200 font-medium">{activeRoute.vesselClass}</span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Primary Carried Commodities:</span>
+                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Cargo:</span>
                   <span className="text-white font-medium">{activeRoute.primaryCargo}</span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Terminal Berth Draft:</span>
+                  <span className="text-slate-400 block mb-1 uppercase text-[10px]">Port suitability:</span>
                   <span className="text-slate-200 font-medium">{activeRoute.draftCapacity}</span>
                 </div>
               </div>
@@ -168,7 +168,7 @@ export const LogisticsMap: React.FC<LogisticsMapProps> = () => {
             <div className="mt-8 pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
               <div className="flex items-center gap-2 text-slate-300">
                 <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0" />
-                <span>Full maritime cargo insurance (Institute Cargo Clauses A) available upon CIF quotation.</span>
+                <span>Insurance and other delivery costs are reviewed and stated in any applicable offer.</span>
               </div>
 
               <a

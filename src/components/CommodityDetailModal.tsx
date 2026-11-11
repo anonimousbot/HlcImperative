@@ -125,12 +125,12 @@ export const CommodityDetailModal: React.FC<CommodityDetailModalProps> = ({
               
               <div className="space-y-3 text-xs">
                 <div>
-                  <span className="text-slate-400 block mb-0.5 font-mono">Monthly Aggregation Capacity:</span>
+                  <span className="text-slate-400 block mb-0.5 font-mono">Availability:</span>
                   <span className="text-white font-semibold">{commodity.exportCapability.monthlyCapacity}</span>
                 </div>
 
                 <div>
-                  <span className="text-slate-400 block mb-0.5 font-mono">Primary Loading Terminals:</span>
+                  <span className="text-slate-400 block mb-0.5 font-mono">Loading port:</span>
                   <span className="text-white font-semibold">
                     {commodity.exportCapability.loadingPorts.join(' · ')}
                   </span>

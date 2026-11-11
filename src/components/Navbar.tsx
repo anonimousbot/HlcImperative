@@ -60,9 +60,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <a href="#commodities" className="hover:text-[#D4AF37] transition-colors whitespace-nowrap">
               {t.nav.commodities}
             </a>
-            <a href="#market-insights" className="hover:text-[#D4AF37] transition-colors whitespace-nowrap">
-              {t.nav.insights}
-            </a>
             <a href="#services" className="hover:text-[#D4AF37] transition-colors whitespace-nowrap">
               {t.nav.services}
             </a>
@@ -86,10 +83,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenCompanyProfile}
               className="text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
-              title="Download Institutional Corporate Profile"
+              title="Open company overview"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>Dossier</span>
+              <span>Company Overview</span>
             </button>
 
             {/* Language Switcher */}
@@ -207,18 +204,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               {t.nav.commodities}
             </a>
             <a
-              href="#market-insights"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-slate-200 hover:text-[#D4AF37] min-h-[44px] flex items-center font-medium"
-            >
-              {t.nav.insights}
-            </a>
-            <a
               href="#rfq-estimator"
               onClick={() => setMobileMenuOpen(false)}
               className="text-slate-200 hover:text-[#D4AF37] min-h-[44px] flex items-center font-medium"
             >
-              Instant RFQ Estimator
+              Request a Quote
             </a>
             <a
               href="#services"
@@ -267,7 +257,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="w-full min-h-[44px] text-xs font-semibold text-slate-200 bg-slate-900 border border-slate-700/80 rounded-xl flex items-center justify-center gap-2 active:bg-slate-800 cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
-              <span>Download Institutional Profile (PDF)</span>
+              <span>Company Overview (Print / PDF)</span>
             </button>
 
             <button

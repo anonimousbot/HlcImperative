@@ -161,7 +161,7 @@ export const CommodityCatalog: React.FC<CommodityCatalogProps> = ({
                       </div>
                       <div className="flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                        <span className="truncate"><strong>Capacity:</strong> {commodity.exportCapability.monthlyCapacity}</span>
+                        <span className="truncate"><strong>Availability:</strong> {commodity.exportCapability.monthlyCapacity}</span>
                       </div>
                     </div>
                   </div>

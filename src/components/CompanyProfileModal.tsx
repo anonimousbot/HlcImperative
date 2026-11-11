@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Printer, ShieldCheck, CheckCircle2, Download } from 'lucide-react';
+import { X, Printer, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { COMMODITIES } from '../data/commodities';
 
 interface CompanyProfileModalProps {
@@ -26,7 +26,7 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
             <span className="text-xs font-mono uppercase tracking-wider text-[#D4AF37] font-semibold">
-              INSTITUTIONAL CORPORATE PROFILE & DOSSIER
+              COMPANY OVERVIEW
             </span>
           </div>
 
@@ -69,15 +69,15 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
                   GLOBAL COMMODITY TRADING & SOURCING HOUSE
                 </div>
                 <div className="text-[11px] text-slate-400 font-mono mt-0.5 print:text-slate-600">
-                  UK: London Trade Desk · Nigeria: Apapa Maritime District, Lagos
+                  Commodity sourcing and trading · Nigeria and African supply enquiries
                 </div>
               </div>
             </div>
 
             <div className="text-left sm:text-right font-mono text-xs text-slate-400 print:text-slate-600">
-              <div>Document: <strong>HLC-CORP-DOSSIER-2026</strong></div>
-              <div>Classification: Commercial & Institutional</div>
-              <div>Status: Fully Certified & Valid</div>
+              <div>HLC IMPERATIVE GRUPO LIMITED</div>
+              <div>Company overview</div>
+              <div>Prepared for business enquiries</div>
             </div>
           </div>
 
@@ -87,31 +87,27 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
               1. Executive Statement & Scope
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 print:text-slate-700 leading-relaxed">
-              HLC IMPERATIVE GRUPO LIMITED is an international commodity merchant specializing in the sourcing, institutional procurement, and maritime export of premium African solid minerals, energy commodities, and petrochemical virgin resins. We operate under rigorous international trade covenants, guaranteeing quality via accredited surveyors (SGS, Bureau Veritas) and providing dependable supply chains to smelters, kilns, and manufacturing consumers globally.
+              HLC IMPERATIVE GRUPO LIMITED is an international commodity sourcing and trading company focused on solid minerals, industrial raw materials and energy commodities from Nigeria and Africa. We aim to connect buyers with suppliers through careful verification, clear communication and reliable execution. Availability, origin, specifications and export arrangements are confirmed for each enquiry.
             </p>
           </div>
 
-          {/* Statutory Registration Matrix */}
+          {/* Commercial approach */}
           <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 print:bg-slate-50 print:border-slate-200">
             <h4 className="text-xs font-mono uppercase text-slate-400 print:text-slate-800 mb-3 font-semibold">
-              Corporate Governance & Statutory Standing
+              How we approach each enquiry
             </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div>
-                <span className="text-slate-500 block text-[10px]">Nigerian CAC Reg:</span>
-                <span className="text-white print:text-black font-bold">RC 1894204</span>
+                <span className="text-slate-500 block text-[10px]">01 · Requirements</span>
+                <span className="text-white print:text-black">Understand product, grade, volume and destination.</span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[10px]">UK Company Desk:</span>
-                <span className="text-white print:text-black font-bold">HLC GRUPO UK LTD</span>
+                <span className="text-slate-500 block text-[10px]">02 · Verification</span>
+                <span className="text-white print:text-black">Review source, availability and supporting documents.</span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[10px]">NEPC Export License:</span>
-                <span className="text-[#D4AF37] print:text-amber-900 font-bold">Active / Certified</span>
-              </div>
-              <div>
-                <span className="text-slate-500 block text-[10px]">CBN Clean Form NXP:</span>
-                <span className="text-emerald-400 print:text-emerald-800 font-bold">Fully Compliant</span>
+                <span className="text-slate-500 block text-[10px]">03 · Terms</span>
+                <span className="text-white print:text-black">Agree assay, inspection, logistics and payment terms before any offer.</span>
               </div>
             </div>
           </div>
@@ -119,25 +115,23 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
           {/* 10 Core Commodities Table */}
           <div className="space-y-3">
             <h3 className="text-sm font-mono uppercase tracking-wider text-[#D4AF37] font-bold print:text-amber-800">
-              2. Core Export Commodities & Typical Specifications
+              2. Sourcing Catalogue
             </h3>
             <div className="overflow-x-auto rounded-xl border border-slate-800 print:border-slate-300">
               <table className="w-full min-w-[550px] text-left text-xs font-mono">
                 <thead>
                   <tr className="bg-slate-900 text-slate-400 print:bg-slate-100 print:text-black border-b border-slate-800 print:border-slate-300">
                     <th className="py-2.5 px-3">Commodity</th>
-                    <th className="py-2.5 px-3">Key Technical Assay</th>
-                    <th className="py-2.5 px-3">Origin Basin</th>
-                    <th className="py-2.5 px-3">Monthly Capacity</th>
+                    <th className="py-2.5 px-3">Applications</th>
+                    <th className="py-2.5 px-3">Supply information</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800 print:divide-slate-200 text-slate-300 print:text-slate-800">
                   {COMMODITIES.map((c) => (
                     <tr key={c.id}>
                       <td className="py-2 px-3 font-semibold text-white print:text-black">{c.name}</td>
-                      <td className="py-2 px-3">{c.typicalSpecs[0].parameter}: {c.typicalSpecs[0].typicalValue}</td>
-                      <td className="py-2 px-3">{c.origin}</td>
-                      <td className="py-2 px-3 font-semibold text-[#D4AF37] print:text-black">{c.exportCapability.monthlyCapacity}</td>
+                      <td className="py-2 px-3">{c.applications[0]}</td>
+                      <td className="py-2 px-3">Origin, grade and volume confirmed per lot</td>
                     </tr>
                   ))}
                 </tbody>
@@ -148,27 +142,27 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
           {/* Trade Banking & Incoterms */}
           <div className="space-y-3">
             <h3 className="text-sm font-mono uppercase tracking-wider text-[#D4AF37] font-bold print:text-amber-800">
-              3. Banking Instruments & Payment Security
+              3. Commercial Terms & Inspection
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800 print:bg-slate-50 print:border-slate-200">
-                <strong className="text-white print:text-black block mb-1">Documentary Letters of Credit</strong>
+                <strong className="text-white print:text-black block mb-1">Payment terms</strong>
                 <p className="text-slate-400 print:text-slate-600 text-[11px]">
-                  Irrevocable, confirmed, transferable/non-transferable DLC at sight issued by Top 50 prime global banks.
+                  Payment method and schedule are discussed for each enquiry and stated in the agreed contract.
                 </p>
               </div>
 
               <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800 print:bg-slate-50 print:border-slate-200">
                 <strong className="text-white print:text-black block mb-1">Incoterms® 2020 Governed</strong>
                 <p className="text-slate-400 print:text-slate-600 text-[11px]">
-                  FOB Apapa/Onne, CIF destination port, or CFR delivery with Institute Cargo Clauses (A) insurance.
+                  Delivery terms and named locations are agreed for each transaction using the applicable Incoterms® rules.
                 </p>
               </div>
 
               <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800 print:bg-slate-50 print:border-slate-200">
                 <strong className="text-white print:text-black block mb-1">Independent Inspection</strong>
                 <p className="text-slate-400 print:text-slate-600 text-[11px]">
-                  SGS or Bureau Veritas sampling, moisture tests, weight certificates, and seal verification at loading.
+                  Independent sampling, assay and weight inspection can be discussed and agreed before shipment.
                 </p>
               </div>
             </div>
@@ -178,12 +172,12 @@ export const CompanyProfileModal: React.FC<CompanyProfileModalProps> = ({
           <div className="pt-4 border-t border-slate-700 print:border-slate-300 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs font-mono text-slate-400 print:text-slate-600">
             <div>
               <span>Official Trade Inquiries: </span>
-              <a href="mailto:hlcimperativegrupo@gmail.com" className="text-[#D4AF37] hover:underline font-bold">hlcimperativegrupo@gmail.com</a> · <strong className="text-white print:text-black">sales@hlcgrupo.co.uk</strong> · <span>info@hlcgrupo.co.uk</span>
+              <a href="mailto:hlcimperativegrupo@gmail.com" className="text-[#D4AF37] hover:underline font-bold">hlcimperativegrupo@gmail.com</a> · <a href="mailto:info@hlcgrupo.co.uk" className="text-white print:text-black">info@hlcgrupo.co.uk</a>
             </div>
 
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
-              <span>Certified Authenticated Corporate Dossier</span>
+              <span>Company overview · Prepared for discussion</span>
             </div>
           </div>
 

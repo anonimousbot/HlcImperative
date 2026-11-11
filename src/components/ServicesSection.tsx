@@ -19,43 +19,43 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       number: '01',
       title: 'Commodity Sourcing',
       icon: Search,
-      description: 'Direct mine-site and quarry identification across Nigeria’s prolific mineral belts. We aggregate premium-grade solid minerals and energy resources directly from verified concession holders with consistent chemical purity.',
-      scope: ['Deposit field assay verification', 'Pit-head sample testing', 'Extraction volume auditing'],
+      description: 'We review buyer requirements and discuss potential supply options, subject to verified availability, product fit and agreed terms.',
+      scope: ['Product requirements', 'Supplier options', 'Availability and terms'],
     },
     {
       number: '02',
-      title: 'Export Management & Regulatory Compliance',
+      title: 'Export Planning',
       icon: Ship,
-      description: 'End-to-end statutory export governance. We navigate Central Bank of Nigeria (CBN) Form NXP processing, Nigerian Export Promotion Council (NEPC) documentation, customs clearance, and Pre-shipment Inspection Agent (PIA) mandates.',
-      scope: ['Statutory Form NXP documentation', 'Clean Certificate of Inspection (CCI)', 'Customs export manifest filing'],
+      description: 'Export documentation, responsibilities and timelines depend on the product, origin, route and parties. These are reviewed before a transaction proceeds.',
+      scope: ['Document checklist', 'Export responsibilities', 'Route and timing review'],
     },
     {
       number: '03',
-      title: 'Supplier Verification & KYC Auditing',
+      title: 'Supplier Review',
       icon: CheckCircle2,
-      description: 'Rigorous vetting of African mine operators, quarry leaseholders, and aggregators. Our verification framework audits Mining Cadastre Office (MCO) titles, environmental compliance, and ethical labor standards.',
-      scope: ['Cadastral lease validation (ML/SSML)', 'Assay laboratory cross-checks', 'Anti-child labor & ESG adherence'],
+      description: 'Supplier information and source documents can be reviewed as part of due diligence. Any transaction is subject to the checks agreed by the parties.',
+      scope: ['Company and source documents', 'Licence checks where applicable', 'Assay and sampling plan'],
     },
     {
       number: '04',
-      title: 'Institutional Procurement',
+      title: 'Industrial Procurement',
       icon: ShoppingBag,
-      description: 'Structured procurement programs tailored to industrial consumers, smelters, and converters requiring steady monthly feedstock. We negotiate bank-backed offtake agreements with predictable pricing bands.',
-      scope: ['Multi-year supply agreements', 'Price risk hedging structures', 'Buffer stockpile aggregation'],
+      description: 'Procurement requests are assessed against the buyer’s product specification, volume, timing, destination and commercial requirements.',
+      scope: ['Specification review', 'Volume and delivery window', 'Offer subject to confirmed supply'],
     },
     {
       number: '05',
-      title: 'Multimodal Logistics & Vessel Chartering',
+      title: 'Logistics Options',
       icon: Truck,
-      description: 'Orchestrating the complete inland haulage and maritime shipping chain: from remote pitheads via heavy-payload trucks to Apapa, Tin Can, and Onne deep-water quays, chartering breakbulk or containerized carriers.',
-      scope: ['Inland haulage coordination', 'Quayside container stuffing & fumigation', 'Handymax / Supramax vessel chartering'],
+      description: 'Logistics options can be discussed once source, cargo, volume and route are known. Shipping plans require confirmation by the relevant suppliers and carriers.',
+      scope: ['Route and port options', 'Packing and handling needs', 'Carrier availability'],
     },
     {
       number: '06',
-      title: 'International Buyer Representation',
+      title: 'Buyer Support',
       icon: UserCheck,
-      description: 'Acting as your dedicated eyes and ears on the ground in Nigeria and West Africa. We safeguard overseas buyers against off-spec shipments through independent assay sampling and escrow banking instruments.',
-      scope: ['Pre-loading joint inspection (SGS/BV)', 'Warehouse audit representation', 'Contractual milestone dispute resolution'],
+      description: 'Buyer representation, inspection coordination and other procurement support can be discussed and scoped for each enquiry.',
+      scope: ['Buyer requirements', 'Inspection options', 'Support agreed per mandate'],
     },
   ];
 
@@ -130,7 +130,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               Need a bespoke sourcing mandate or institutional offtake agreement?
             </div>
             <div className="text-xs text-slate-300">
-              Our London and Lagos trade desks structure multi-vessel contracts governed by English law and ICC Incoterms®.
+              Tell us your product, volume, destination and timing requirements. We will review them and discuss possible next steps.
             </div>
           </div>
 

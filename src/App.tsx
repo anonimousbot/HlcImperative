@@ -9,7 +9,6 @@ import { COMMODITIES } from './data/commodities';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CommodityCatalog } from './components/CommodityCatalog';
-import { MarketInsights } from './components/MarketInsights';
 import { CommodityDetailModal } from './components/CommodityDetailModal';
 import { RfqEstimator } from './components/RfqEstimator';
 import { LogisticsMap } from './components/LogisticsMap';
@@ -20,7 +19,6 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { SupplierPortalModal } from './components/SupplierPortalModal';
 import { CompanyProfileModal } from './components/CompanyProfileModal';
-import { EmailSetupModal } from './components/EmailSetupModal';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Language>('en');
@@ -28,7 +26,6 @@ export default function App() {
   const [rfqTargetCommodity, setRfqTargetCommodity] = useState<Commodity | null>(null);
   const [isSupplierPortalOpen, setIsSupplierPortalOpen] = useState(false);
   const [isCompanyProfileOpen, setIsCompanyProfileOpen] = useState(false);
-  const [isEmailSetupOpen, setIsEmailSetupOpen] = useState(false);
 
   // Sync RTL direction when Arabic is selected
   useEffect(() => {
@@ -38,6 +35,18 @@ export default function App() {
       document.documentElement.dir = 'ltr';
     }
   }, [currentLang]);
+
+  useEffect(() => {
+    const syncCommodityFromUrl = () => {
+      const commodityId = new URLSearchParams(window.location.search).get('commodity');
+      const commodity = COMMODITIES.find((item) => item.id === commodityId) || null;
+      setSelectedCommodityModal(commodity);
+    };
+
+    syncCommodityFromUrl();
+    window.addEventListener('popstate', syncCommodityFromUrl);
+    return () => window.removeEventListener('popstate', syncCommodityFromUrl);
+  }, []);
 
   const handleScrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -56,8 +65,18 @@ export default function App() {
   const handleSelectCommodityById = (commodityId: string) => {
     const found = COMMODITIES.find((c) => c.id === commodityId);
     if (found) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('commodity', found.id);
+      window.history.pushState({}, '', url);
       setSelectedCommodityModal(found);
     }
+  };
+
+  const handleCloseCommodity = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('commodity');
+    window.history.pushState({}, '', url);
+    setSelectedCommodityModal(null);
   };
 
   return (
@@ -86,23 +105,17 @@ export default function App() {
         {/* 2. Commodity Catalog with 10 Detailed Products & Laboratory Assays */}
         <CommodityCatalog
           currentLang={currentLang}
-          onSelectCommodity={(c) => setSelectedCommodityModal(c)}
+          onSelectCommodity={(c) => handleSelectCommodityById(c.id)}
           onQuoteCommodity={(c) => handleRequestQuote(c)}
         />
 
-        {/* 3. Global Market Insights & Logistics Dashboard */}
-        <MarketInsights
-          currentLang={currentLang}
-          onQuoteCommodity={(c) => handleRequestQuote(c)}
-        />
-
-        {/* 4. Interactive RFQ & Incoterms 2020 Estimator */}
+        {/* Interactive RFQ form */}
         <RfqEstimator
           currentLang={currentLang}
           preselectedCommodity={rfqTargetCommodity}
         />
 
-        {/* 4. Global Logistics Shipping Routes & Discharge Hubs Visualizer */}
+        {/* Logistics overview */}
         <LogisticsMap currentLang={currentLang} />
 
         {/* 5. Integrated Sourcing & Maritime Services */}
@@ -117,7 +130,7 @@ export default function App() {
         {/* 7. Corporate About, Mission, Vision, Experience & ESG Framework */}
         <AboutSection currentLang={currentLang} />
 
-        {/* 8. Global Desks, Map, Statutory Registrations & Inquiries Form */}
+        {/* Contact details and enquiries form */}
         <ContactSection
           currentLang={currentLang}
         />
@@ -129,14 +142,13 @@ export default function App() {
         currentLang={currentLang}
         onOpenCompanyProfile={() => setIsCompanyProfileOpen(true)}
         onSelectCommodity={handleSelectCommodityById}
-        onOpenEmailSetup={() => setIsEmailSetupOpen(true)}
       />
 
       {/* Modals & Overlays */}
       <CommodityDetailModal
         commodity={selectedCommodityModal}
         currentLang={currentLang}
-        onClose={() => setSelectedCommodityModal(null)}
+        onClose={handleCloseCommodity}
         onQuoteThis={(c) => handleRequestQuote(c)}
       />
 
@@ -149,11 +161,6 @@ export default function App() {
       <CompanyProfileModal
         isOpen={isCompanyProfileOpen}
         onClose={() => setIsCompanyProfileOpen(false)}
-      />
-
-      <EmailSetupModal
-        isOpen={isEmailSetupOpen}
-        onClose={() => setIsEmailSetupOpen(false)}
       />
 
     </div>
