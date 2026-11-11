@@ -67,26 +67,17 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
   const handleGenerateQuote = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Keep browser validation from silently blocking the submit handler. Report
-    // the exact invalid field in the form so the buyer knows what to correct.
-    const form = e.currentTarget as HTMLFormElement;
-    if (!form.checkValidity()) {
-      const invalidField = form.querySelector(':invalid') as HTMLInputElement | HTMLSelectElement | null;
-      const fieldLabel = invalidField?.getAttribute('aria-label')
-        || invalidField?.closest('div')?.querySelector('label')?.textContent?.replace('*', '').trim()
-        || invalidField?.getAttribute('placeholder')
-        || 'required field';
-      setSubmitError(`Please check ${fieldLabel}: ${invalidField?.validationMessage || 'this field is required.'}`);
-      invalidField?.focus();
-      return;
-    }
-
     const missingField = !formData.commodityId ? 'commodity'
       : !formData.buyerName.trim() ? 'name'
         : !formData.buyerCompany.trim() ? 'company'
           : !formData.buyerEmail.trim() ? 'email' : '';
     if (missingField) {
       setSubmitError(`Please enter the required ${missingField}.`);
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.buyerEmail.trim())) {
+      setSubmitError('Please enter a valid email address.');
       return;
     }
 
