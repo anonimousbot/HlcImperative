@@ -80,7 +80,6 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
       timestamp: new Date().toISOString(),
     };
 
-    setIsSubmitting(true);
     setSubmitError('');
     try {
       await submitToWebForms('Buyer quote request', {

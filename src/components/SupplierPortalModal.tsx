@@ -18,8 +18,6 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
   currentLang,
   onClose,
 }) => {
-  if (!isOpen) return null;
-
   const t = TRANSLATIONS[currentLang].supplier;
 
   const [formData, setFormData] = useState<SupplierApplicationData>({
@@ -40,6 +38,8 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
