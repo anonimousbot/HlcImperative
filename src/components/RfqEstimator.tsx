@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Ship, Clock, CheckSquare, Printer, CheckCircle, Calculator, Info, Mail, ExternalLink } from 'lucide-react';
+import { Ship, Clock, CheckSquare, Printer, CheckCircle, Calculator, Info } from 'lucide-react';
 import { Commodity, Language, RfqFormData, RfqQuoteRecord } from '../types';
 import { COMMODITIES } from '../data/commodities';
 import { TRANSLATIONS } from '../data/translations';
 import { PhoneInput } from './PhoneInput';
+import { COUNTRIES } from '../data/callingCodes';
+import { submitToWebForms } from '../lib/webforms';
 
 interface RfqEstimatorProps {
   currentLang: Language;
@@ -45,6 +47,8 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
 
   const [generatedQuote, setGeneratedQuote] = useState<RfqQuoteRecord | null>(null);
   const [submittedMessage, setSubmittedMessage] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     if (preselectedCommodity) {
@@ -61,9 +65,6 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
   const handleInputChange = (field: keyof RfqFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [mailLinks, setMailLinks] = useState<{ mailto: string; gmail: string } | null>(null);
 
   const handleGenerateQuote = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,40 +96,31 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
       complianceChecklist: docs,
     };
 
-    const emailSubject = `[HLC RFQ] ${formData.volumeMt} MT ${currentCommodity.name} (${quoteRecord.incoterm} ${formData.destinationPort}) - ${formData.buyerCompany}`;
-    const emailBody = `OFFICIAL COMMERCIAL RFQ MANIFEST\nReference ID: ${quoteCode}\nTimestamp: ${quoteRecord.timestamp}\n\nBUYER DETAILS:\n- Procurement Officer: ${formData.buyerName}\n- Corporate Entity: ${formData.buyerCompany}\n- Email: ${formData.buyerEmail}\n- Phone / WhatsApp: ${formData.buyerPhone}\n- Destination Country: ${formData.buyerCountry}\n\nCOMMODITY & LOGISTICS:\n- Commodity: ${currentCommodity.name}\n- Contracted Volume: ${formData.volumeMt} MT\n- Incoterms 2020: ${formData.incoterm}\n- Loading Port: ${loadingPort}\n- Destination Discharge Port: ${formData.destinationPort}\n- Packaging: ${formData.packagingPreference}\n- Assay Requirements & Notes: ${formData.notes || 'Standard ASTM/ISO assay specifications'}\n\nTarget Email: hlcimperativegrupo@gmail.com`;
-
-    const mailto = `mailto:hlcimperativegrupo@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=hlcimperativegrupo@gmail.com&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
-    setMailLinks({ mailto, gmail });
-
+    setIsSubmitting(true);
+    setSubmitError('');
     try {
-      await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'rfq',
-          name: formData.buyerName,
-          company: formData.buyerCompany,
-          email: formData.buyerEmail,
-          phone: formData.buyerPhone,
-          country: formData.buyerCountry,
-          commodity: currentCommodity.name,
-          volumeMt: formData.volumeMt,
-          incoterm: formData.incoterm,
-          destinationPort: formData.destinationPort,
-          packaging: formData.packagingPreference,
-          notes: formData.notes,
-          referenceId: quoteCode,
-        }),
+      await submitToWebForms('Buyer quote request', {
+        name: formData.buyerName,
+        company: formData.buyerCompany,
+        email: formData.buyerEmail,
+        _replyto: formData.buyerEmail,
+        phone_whatsapp: formData.buyerPhone || 'Not provided',
+        country: formData.buyerCountry || 'Not provided',
+        commodity: currentCommodity.name,
+        grade: formData.grade,
+        volume_mt: formData.volumeMt,
+        incoterm: formData.incoterm,
+        destination_port: formData.destinationPort,
+        packaging: formData.packagingPreference,
+        notes: formData.notes || 'None',
+        reference: quoteCode,
       });
-    } catch (err) {
-      console.warn('Backend fetch failed, client mail links ready:', err);
-    } finally {
-      setIsSubmitting(false);
       setGeneratedQuote(quoteRecord);
       setSubmittedMessage(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'The quote request could not be sent. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -337,13 +329,14 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
 
                   <div>
                     <label className="block text-xs text-slate-300 mb-1">{t.countryLabel}</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Germany / China"
+                    <select
                       value={formData.buyerCountry}
                       onChange={(e) => handleInputChange('buyerCountry', e.target.value)}
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
-                    />
+                    >
+                      <option value="">Select a country</option>
+                      {COUNTRIES.map((country) => <option key={country} value={country}>{country}</option>)}
+                    </select>
                   </div>
                 </div>
 
@@ -362,11 +355,14 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
               {/* Submit CTA */}
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full py-3.5 text-sm font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Ship className="w-4 h-4" />
-                <span>{t.submitRfqBtn}</span>
+                <span>{isSubmitting ? 'Sending…' : t.submitRfqBtn}</span>
               </button>
+
+              {submitError && <p role="alert" className="text-sm text-red-300">{submitError}</p>}
 
             </form>
           </div>
@@ -500,26 +496,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                     </button>
                   </div>
 
-                  {mailLinks && (
-                    <div className="flex flex-col sm:flex-row gap-2 pt-1">
-                      <a
-                        href={mailLinks.gmail}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 py-2 px-3 text-xs font-bold text-slate-950 bg-[#D4AF37] hover:bg-[#FFF] rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Send via Gmail Web</span>
-                      </a>
-                      <a
-                        href={mailLinks.mailto}
-                        className="flex-1 py-2 px-3 text-xs font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors flex items-center justify-center gap-1.5 text-center"
-                      >
-                        <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
-                        <span>Send via Mail App</span>
-                      </a>
-                    </div>
-                  )}
+                  <p className="text-[11px] text-emerald-300">Your quote request was sent to HLC.</p>
                 </div>
 
               </div>

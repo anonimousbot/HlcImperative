@@ -3,6 +3,7 @@ import { X, ShieldCheck, CheckCircle2, Building, Pickaxe } from 'lucide-react';
 import { Language, SupplierApplicationData } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import { PhoneInput } from './PhoneInput';
+import { submitToWebForms } from '../lib/webforms';
 
 interface SupplierPortalModalProps {
   isOpen: boolean;
@@ -36,45 +37,35 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
 
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [mailLinks, setMailLinks] = useState<{ mailto: string; gmail: string } | null>(null);
+  const [submitError, setSubmitError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     const refCode = `HLC-SUP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-
-    const emailSubject = `[HLC Supplier] New Mine Operator Application - ${formData.companyName} (${refCode})`;
-    const emailBody = `HLC SUPPLIER ONBOARDING DOSSIER\nReference ID: ${refCode}\n\nCOMPANY / CONCESSION:\n- Legal Name: ${formData.companyName}\n- Registration / RC: ${formData.registrationNumber}\n- State / Mining Belt: ${formData.stateOrProvince}\n- Cadastral Lease ID: ${formData.miningLeaseNumber}\n\nPRODUCTION:\n- Commodity: ${formData.mineralOrCommodity}\n- Monthly Capacity: ${formData.monthlySupplyCapacity}\n- Certified Assay Available: ${formData.laboratoryAssayAvailable ? 'Yes' : 'No'}\n\nCONTACT PERSON:\n- Lead Executive: ${formData.contactPerson}\n- Email: ${formData.email}\n- Phone: ${formData.phone}\n- Notes & Haulage: ${formData.notes || 'None'}\n\nDestination: hlcimperativegrupo@gmail.com`;
-
-    const mailto = `mailto:hlcimperativegrupo@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=hlcimperativegrupo@gmail.com&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
-    setMailLinks({ mailto, gmail });
-
+    setIsSubmitting(true);
+    setSubmitError('');
     try {
-      await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'supplier',
-          name: formData.contactPerson,
-          company: formData.companyName,
-          email: formData.email,
-          phone: formData.phone,
-          country: formData.country,
-          commodity: formData.mineralOrCommodity,
-          leaseId: formData.miningLeaseNumber,
-          monthlyCapacity: formData.monthlySupplyCapacity,
-          assayAvailable: formData.laboratoryAssayAvailable,
-          notes: formData.notes,
-          referenceId: refCode,
-        }),
+      await submitToWebForms('Supplier application', {
+        supplier_company: formData.companyName,
+        registration_number: formData.registrationNumber,
+        country: formData.country,
+        state_or_province: formData.stateOrProvince,
+        contact_person: formData.contactPerson,
+        email: formData.email,
+        _replyto: formData.email,
+        phone_whatsapp: formData.phone,
+        commodity: formData.mineralOrCommodity,
+        mining_lease_number: formData.miningLeaseNumber,
+        monthly_supply_capacity: formData.monthlySupplyCapacity,
+        laboratory_assay_available: formData.laboratoryAssayAvailable ? 'Yes' : 'No',
+        notes: formData.notes || 'None',
+        application_reference: refCode,
       });
-    } catch (err) {
-      console.warn('Backend fetch failed, client mail links ready:', err);
+      setSubmittedRef(refCode);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Your application could not be sent. Please try again.');
     } finally {
       setIsSubmitting(false);
-      setSubmittedRef(refCode);
     }
   };
 
@@ -116,32 +107,13 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
               </h3>
 
               <p className="text-sm text-slate-300 max-w-md mx-auto">
-                {t.submittedDesc} Transmitted and logged for review by the Nigerian procurement committee at <strong className="text-[#D4AF37] font-mono">hlcimperativegrupo@gmail.com</strong>.
+              {t.submittedDesc} Your application has been sent to HLC for review.
               </p>
 
               <div className="inline-block p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs my-2">
                 <span className="text-slate-400 block mb-1">Application Reference Code:</span>
                 <span className="text-lg font-bold text-[#D4AF37]">{submittedRef}</span>
               </div>
-
-              {mailLinks && (
-                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-2">
-                  <a
-                    href={mailLinks.gmail}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 py-2.5 px-3 text-xs font-bold text-slate-950 bg-[#D4AF37] hover:bg-[#FFF] rounded-lg transition-colors text-center"
-                  >
-                    Open Pre-filled in Gmail
-                  </a>
-                  <a
-                    href={mailLinks.mailto}
-                    className="flex-1 py-2.5 px-3 text-xs font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition-colors text-center"
-                  >
-                    Send via Mail App
-                  </a>
-                </div>
-              )}
 
               <div className="pt-3">
                 <button
@@ -350,9 +322,11 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
                 <button
                   type="submit"
                   className="w-full sm:w-auto px-6 py-2.5 min-h-[44px] text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center active:scale-[0.99]"
+                  disabled={isSubmitting}
                 >
-                  {t.submitBtn}
+                  {isSubmitting ? 'Sending…' : t.submitBtn}
                 </button>
+                {submitError && <p role="alert" className="text-sm text-red-300">{submitError}</p>}
               </div>
 
             </form>

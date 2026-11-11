@@ -80,3 +80,5 @@ export const CALLING_CODES: Array<{ country: string; code: string }> = [
   { country: 'Vanuatu', code: '+678' }, { country: 'Venezuela', code: '+58' }, { country: 'Viet Nam', code: '+84' },
   { country: 'Wallis and Futuna', code: '+681' }, { country: 'Yemen', code: '+967' }, { country: 'Zambia', code: '+260' }, { country: 'Zimbabwe', code: '+263' },
 ];
+
+export const COUNTRIES = [...new Set(CALLING_CODES.map(({ country }) => country))].sort((a, b) => a.localeCompare(b));

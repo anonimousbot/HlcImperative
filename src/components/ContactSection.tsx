@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, Building2, Send, CheckCircle2, ShieldCheck, Globe2
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import { PhoneInput } from './PhoneInput';
+import { submitToWebForms } from '../lib/webforms';
 
 interface ContactSectionProps {
   currentLang: Language;
@@ -12,6 +13,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
   const t = TRANSLATIONS[currentLang].contact;
 
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,23 +24,30 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
       alert('Please complete the required contact fields.');
       return;
     }
-    const body = [
-      `Name: ${formData.name}`,
-      `Company: ${formData.company}`,
-      `Email: ${formData.email}`,
-      `Phone / WhatsApp: ${formData.phone || 'Not provided'}`,
-      `Subject: ${formData.subject}`,
-      '',
-      formData.message,
-    ].join('\n');
-    window.location.href = `mailto:info@hlcgrupo.co.uk,hlcimperativegrupo@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(body)}`;
-    setFormSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      await submitToWebForms('Contact enquiry', {
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        _replyto: formData.email,
+        phone_whatsapp: formData.phone || 'Not provided',
+        subject: formData.subject,
+        message: formData.message,
+      });
+      setFormSubmitted(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'The form could not be sent. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -182,10 +192,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-bold text-white">
-                  Your email app should open with your enquiry
+                  Your enquiry has been sent
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
-                  Review and send the message in your email app. If it did not open, email us at info@hlcgrupo.co.uk or hlcimperativegrupo@gmail.com, or WhatsApp +44 7900 904646.
+                  Thank you for contacting HLC IMPERATIVE GRUPO LIMITED. Your message has been submitted to our team.
                 </p>
                 <button
                   onClick={() => setFormSubmitted(false)}
@@ -285,16 +295,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
                 <div className="pt-2">
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full py-3.5 text-sm font-bold text-slate-950 bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#C5A059] hover:from-[#FFF1B8] hover:to-[#D4AF37] rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
-                    <span>{t.submitMessage}</span>
+                    <span>{isSubmitting ? 'Sending…' : t.submitMessage}</span>
                   </button>
                 </div>
 
+                {submitError && <p role="alert" className="text-sm text-red-300">{submitError}</p>}
+
                 <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 pt-2 font-mono">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
-                  <span>Your message is prepared in your email app for you to review and send.</span>
+                  <span>Your enquiry is sent securely to HLC’s contact inbox.</span>
                 </div>
               </form>
             )}
