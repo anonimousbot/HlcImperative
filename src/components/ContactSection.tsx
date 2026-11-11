@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Building2, Send, CheckCircle2, ShieldCheck, Globe2 } from 'lucide-react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
+import { PhoneInput } from './PhoneInput';
 
 interface ContactSectionProps {
   currentLang: Language;
@@ -245,12 +246,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ currentLang }) =
 
                   <div>
                     <label className="block text-xs text-slate-300 mb-1">Phone / WhatsApp</label>
-                    <input
-                      type="text"
-                      placeholder="+44 ... or +1 ..."
+                    <PhoneInput
+                      label="Phone / WhatsApp"
+                      placeholder="Phone number"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
+                      onChange={(phone) => setFormData({ ...formData, phone })}
                     />
                   </div>
                 </div>

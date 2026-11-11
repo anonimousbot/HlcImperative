@@ -3,6 +3,7 @@ import { Ship, Clock, CheckSquare, Printer, CheckCircle, Calculator, Info } from
 import { Commodity, Language, RfqFormData, RfqQuoteRecord } from '../types';
 import { COMMODITIES } from '../data/commodities';
 import { TRANSLATIONS } from '../data/translations';
+import { PhoneInput } from './PhoneInput';
 
 interface RfqEstimatorProps {
   currentLang: Language;
@@ -290,12 +291,11 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
 
                   <div>
                     <label className="block text-xs text-slate-300 mb-1">{t.phoneLabel}</label>
-                    <input
-                      type="text"
-                      placeholder="+44 20 ... or +86 138 ..."
+                    <PhoneInput
+                      label={t.phoneLabel}
+                      placeholder="Phone number"
                       value={formData.buyerPhone}
-                      onChange={(e) => handleInputChange('buyerPhone', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
+                      onChange={(phone) => handleInputChange('buyerPhone', phone)}
                     />
                   </div>
 

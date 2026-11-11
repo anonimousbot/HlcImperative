@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, ShieldCheck, CheckCircle2, Building, Pickaxe } from 'lucide-react';
 import { Language, SupplierApplicationData } from '../types';
 import { TRANSLATIONS } from '../data/translations';
+import { PhoneInput } from './PhoneInput';
 
 interface SupplierPortalModalProps {
   isOpen: boolean;
@@ -259,13 +260,12 @@ export const SupplierPortalModal: React.FC<SupplierPortalModalProps> = ({
 
                   <div>
                     <label className="block text-xs text-slate-300 mb-1">{t.phone} *</label>
-                    <input
-                      type="text"
+                    <PhoneInput
+                      label={t.phone}
                       required
-                      placeholder="+234 803 ..."
+                      placeholder="Phone number"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-[#D4AF37] focus:outline-none"
+                      onChange={(phone) => setFormData({ ...formData, phone })}
                     />
                   </div>
                 </div>
