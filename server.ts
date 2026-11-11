@@ -2,7 +2,6 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -52,24 +51,6 @@ const getWeb3FormsKey = (): string | null => {
         return cfg.web3formsKey.trim();
       }
     } catch {}
-  }
-  return null;
-};
-
-// Configure optional SMTP transporter if environment credentials exist
-const createTransporter = () => {
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-  const portNum = Number(process.env.SMTP_PORT) || 465;
-  const user = process.env.SMTP_USER || process.env.GMAIL_USER;
-  const pass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
-
-  if (user && pass) {
-    return nodemailer.createTransport({
-      host,
-      port: portNum,
-      secure: portNum === 465,
-      auth: { user, pass },
-    });
   }
   return null;
 };
@@ -198,25 +179,7 @@ Generated automatically via HLC Global Trade Portal
         console.error(`[HLC Web3Forms] Error:`, err);
       }
     } else {
-      // Fallback: check optional SMTP or store locally with 1-click webmail dispatch
-      const transporter = createTransporter();
-      if (transporter) {
-        try {
-          await transporter.sendMail({
-            from: `"HLC Trade Desk" <${process.env.SMTP_USER || PRIMARY_CONTACT_EMAIL}>`,
-            to: PRIMARY_CONTACT_EMAIL,
-            replyTo: email,
-            subject: emailSubject,
-            text: emailBody,
-          });
-          emailSent = true;
-          dispatchMethod = 'smtp';
-        } catch (err: any) {
-          emailError = err.message;
-        }
-      } else {
-        console.log(`[HLC Mailer] No Web3Forms key configured yet. Stored inquiry ${refId} locally and prepared 1-click Gmail fallback.`);
-      }
+      console.log(`[HLC Mailer] No legacy Web3Forms key configured. Stored inquiry ${refId} locally.`);
     }
 
     // Construct direct mailto and Gmail links for instant 1-click fallback
