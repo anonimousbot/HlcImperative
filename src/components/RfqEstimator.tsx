@@ -67,7 +67,8 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
   const handleGenerateQuote = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.buyerName || !formData.buyerEmail || !formData.buyerCompany) {
+    if (!formData.commodityId || !formData.buyerName || !formData.buyerEmail || !formData.buyerCompany) {
+      setSubmitError('Please complete the highlighted required fields: commodity, name, company and email.');
       return;
     }
 
@@ -134,7 +135,11 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
           
           {/* Left Form: Parameter Inputs */}
           <div className="lg:col-span-7 bg-[#070F1E] border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
-            <form onSubmit={handleGenerateQuote} className="space-y-6">
+            <form
+              onSubmit={handleGenerateQuote}
+              onInvalid={() => setSubmitError('Please complete the highlighted required fields. Name, company and email are needed to send your quote request.')}
+              className="space-y-6"
+            >
               
               {/* Row 1: Commodity Selection */}
               <div>
@@ -142,6 +147,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                   {t.commoditySelect}
                 </label>
                 <select
+                  required
                   value={formData.commodityId}
                   onChange={(e) => handleInputChange('commodityId', e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
@@ -258,7 +264,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
               {/* Buyer Contact Details */}
               <div className="pt-4 border-t border-slate-800 space-y-4">
                 <div className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                  Corporate Buyer Verification
+                  Buyer contact details · Name, company and email are required
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
