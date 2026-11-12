@@ -6,6 +6,7 @@ import { TRANSLATIONS } from '../data/translations';
 import { PhoneInput } from './PhoneInput';
 import { COUNTRIES } from '../data/callingCodes';
 import { submitToWebForms } from '../lib/webforms';
+import { downloadRfqPdf } from '../lib/rfqPdf';
 
 interface RfqEstimatorProps {
   currentLang: Language;
@@ -63,6 +64,27 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
   const currentCommodity = COMMODITIES.find((c) => c.id === formData.commodityId) || COMMODITIES[0];
   const handleInputChange = (field: keyof RfqFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const emailDraftHref = (quote: RfqQuoteRecord) => {
+    const subject = `HLC RFQ ${quote.referenceId} - ${currentCommodity.name}`;
+    const body = [
+      'Buyer request for quotation',
+      `Reference: ${quote.referenceId}`,
+      `Commodity: ${currentCommodity.name}`,
+      `Volume: ${quote.volumeMt} MT`,
+      `Incoterms 2020: ${quote.incoterm}`,
+      `Destination port: ${quote.destinationPort}`,
+      `Destination country: ${quote.buyerCountry || 'Not provided'}`,
+      `Packaging: ${quote.packagingPreference}`,
+      `Assay / sizing: ${quote.grade}`,
+      `Buyer name: ${quote.buyerName}`,
+      `Company: ${quote.buyerCompany}`,
+      `Email: ${quote.buyerEmail}`,
+      `Telephone / WhatsApp: ${quote.buyerPhone || 'Not provided'}`,
+      `Additional requirements: ${quote.notes || 'None'}`,
+    ].join('\n');
+    return `mailto:hlcimperativegrupo@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   const handleGenerateQuote = async (e: React.FormEvent) => {
@@ -448,6 +470,13 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                     </span>
                     <button
                       type="button"
+                      onClick={() => downloadRfqPdf(generatedQuote, currentCommodity.name)}
+                      className="px-2.5 py-1 text-[11px] text-slate-950 bg-[#D4AF37] hover:bg-[#F5D77F] rounded font-bold transition-colors print:hidden"
+                    >
+                      Download PDF
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => window.print()}
                       className="px-2.5 py-1 text-[11px] text-slate-300 hover:text-white bg-slate-800 rounded font-bold transition-colors flex items-center gap-1 print:hidden"
                     >
@@ -455,6 +484,15 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                       <span>Print / Save as PDF</span>
                     </button>
                   </div>
+
+                  {!emailSent && (
+                    <a
+                      href={emailDraftHref(generatedQuote)}
+                      className="inline-flex mt-2 text-[11px] text-[#D4AF37] hover:underline print:hidden"
+                    >
+                      Open an email draft to HLC if delivery is delayed
+                    </a>
+                  )}
 
                   <p className="text-[11px] text-emerald-300">
                     {emailSent
