@@ -48,6 +48,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
   const [generatedQuote, setGeneratedQuote] = useState<RfqQuoteRecord | null>(null);
   const [submittedMessage, setSubmittedMessage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
@@ -67,8 +68,16 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
   const handleGenerateQuote = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.commodityId || !formData.buyerName || !formData.buyerEmail || !formData.buyerCompany) {
-      setSubmitError('Please complete the highlighted required fields: commodity, name, company and email.');
+    const missingField = !formData.commodityId ? 'target commodity'
+      : !formData.buyerName.trim() ? 'full name'
+        : !formData.buyerCompany.trim() ? 'company / buyer entity'
+          : !formData.buyerEmail.trim() ? 'corporate email' : '';
+    if (missingField) {
+      setSubmitError(`Please complete the ${missingField} field.`);
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.buyerEmail.trim())) {
+      setSubmitError('Please enter a valid corporate email address.');
       return;
     }
 
@@ -82,6 +91,8 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
     };
 
     setSubmitError('');
+    setGeneratedQuote(quoteRecord);
+    setEmailSent(false);
     try {
       await submitToWebForms('Buyer quote request', {
         name: formData.buyerName,
@@ -99,7 +110,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
         notes: formData.notes || 'None',
         reference: quoteCode,
       });
-      setGeneratedQuote(quoteRecord);
+      setEmailSent(true);
       setSubmittedMessage(true);
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'The quote request could not be sent. Please try again.');
@@ -137,7 +148,7 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
           <div className="lg:col-span-7 bg-[#070F1E] border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
             <form
               onSubmit={handleGenerateQuote}
-              onInvalid={() => setSubmitError('Please complete the highlighted required fields. Name, company and email are needed to send your quote request.')}
+              noValidate
               className="space-y-6"
             >
               
@@ -396,14 +407,14 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
 
             {/* Enquiry acknowledgement */}
             {generatedQuote && (
-              <div className="bg-[#0B172B] border-2 border-[#D4AF37]/50 rounded-2xl p-6 shadow-2xl relative animate-in fade-in">
+              <div id="rfq-quote-document" className="bg-[#0B172B] border-2 border-[#D4AF37]/50 rounded-2xl p-6 shadow-2xl relative animate-in fade-in">
                 
                 {/* Stamped Badge */}
                 <div className="flex items-center justify-between pb-3 border-b border-slate-700">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-emerald-400" />
                     <span className="text-xs font-bold text-white font-mono">
-                      QUOTE REQUEST SENT
+                      {emailSent ? 'QUOTE REQUEST SENT' : 'PDF QUOTE READY'}
                     </span>
                   </div>
                   <span className="text-xs font-mono font-bold text-[#D4AF37]">
@@ -438,14 +449,20 @@ export const RfqEstimator: React.FC<RfqEstimatorProps> = ({
                     <button
                       type="button"
                       onClick={() => window.print()}
-                      className="px-2.5 py-1 text-[11px] text-slate-300 hover:text-white bg-slate-800 rounded font-bold transition-colors flex items-center gap-1"
+                      className="px-2.5 py-1 text-[11px] text-slate-300 hover:text-white bg-slate-800 rounded font-bold transition-colors flex items-center gap-1 print:hidden"
                     >
                       <Printer className="w-3 h-3" />
-                      <span>Print</span>
+                      <span>Print / Save as PDF</span>
                     </button>
                   </div>
 
-                  <p className="text-[11px] text-emerald-300">Your quote request was sent to HLC.</p>
+                  <p className="text-[11px] text-emerald-300">
+                    {emailSent
+                      ? 'Your quote request was sent to HLC.'
+                      : isSubmitting
+                        ? 'Your PDF quote summary is ready. Email delivery is being confirmed.'
+                        : 'Your PDF quote summary is ready, but email delivery could not be confirmed.'}
+                  </p>
                 </div>
 
               </div>

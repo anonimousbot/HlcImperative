@@ -40,3 +40,36 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #D4AF37;
 }
+
+@media print {
+  @page {
+    margin: 16mm;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #rfq-quote-document,
+  #rfq-quote-document * {
+    visibility: visible !important;
+    color: #111827 !important;
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+  }
+
+  #rfq-quote-document {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+  }
+
+  #rfq-quote-document svg {
+    color: #111827 !important;
+  }
+}
